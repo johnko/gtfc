@@ -129,7 +129,7 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
 # 3. on hostB as urep, run: gtfc clone HOSTA
 ######################################################################
 elif [ "clone" = "$1" ]; then # run on clones
-  ssh urep@${2} "gtfc add $2"
+  ssh urep@${2} "gtfc add `hostname`"
   [ -d gitsync ] || git clone urep@${2}:~/gitsync
   [ -d gitsync ] || exit 1
   cd gitsync
