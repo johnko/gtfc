@@ -31,10 +31,6 @@
 ######################################################################
 SCRIPTVERSION=150112-071917
 
-########## if root has ~/.ssh/authorized_keys, install it to urep user
-# install -d -o urep -g urep /usr/home/urep/.ssh
-# install -o urep -g urep ~/.ssh/authorized_keys /usr/home/urep/.ssh/
-
 ######################################################################
 # ssh-keygen id_rsa
 ######################################################################
