@@ -42,7 +42,7 @@ cd ${HOME}
   || cp ${HOME}/.ssh/id_rsa.pub ${HOME}/.ssh/authorized_keys2
 
 ######################################################################
-# 1. on HOSTA as urep, run: gtfc init
+# 1. on HOSTA as urep, run: gtfc init HOSTA
 ######################################################################
 if [ "init" = "$1" ]; then
 
@@ -138,7 +138,7 @@ elif [ "clone" = "$1" ]; then # run on clones
 ######################################################################
 # 4. on HOSTA as urep, run: sh gitsync/gitpullall.sh
 ######################################################################
-  ssh urep@${2} 'sh ~/gitsync/gitpullall.sh'
+  ssh urep@${2} 'sh gitsync/gitpullall.sh'
 
 ######################################################################
 # 5. on HOSTA as urep, run: gtfc push hostB
