@@ -32,6 +32,14 @@ sh gitsync/gitpullall.sh
 ssh -A urep@alpha gtfc push public
 ```
 
+5) On alpha or betasaurus
+
+cd gitsync
+date > testdate
+git add .
+git commit -m "add testdate"
+
+Wait about 60 seconds for the other nodes to pull.
 
 # Long Usage
 
