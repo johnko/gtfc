@@ -138,7 +138,7 @@ elif [ "clone" = "$1" ]; then # run on clones
 ######################################################################
 # 4. on HOSTA as urep, run: sh gitsync/gitpullall.sh
 ######################################################################
-  echo 'on HOSTA as urep, run: sh gitsync/gitpullall.sh'
+  ssh urep@${2} 'sh gitsync/gitpullall.sh'
 
 ######################################################################
 # 5. on HOSTA as urep, run: gtfc push hostB
@@ -156,6 +156,7 @@ elif [ "push" = "$1" ]; then
   git commit -m "added push$2 to config"
   git push push${2} master
   ssh urep@${2} 'git clone gitsyncpush gitsync'
+  ssh urep@${2} 'sh gitsync/gitpullbare.sh'
   # end of push
 
 fi
