@@ -116,3 +116,7 @@ else # run on clones
   git add .
   git commit -m "added `hostname` to authorized_keys2"
 fi
+
+######################################################################
+# 4. on HOSTA as urep, run: sh gitsync/gitpullall.sh
+######################################################################
