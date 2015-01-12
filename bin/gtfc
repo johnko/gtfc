@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150112-071917
+SCRIPTVERSION=150112-074852
 
 ######################################################################
 # ssh-keygen id_rsa
@@ -110,6 +110,7 @@ EOF
   # end of init
 
 ######################################################################
+# This can be skipped if you ssh -A urep@hostB gtfc clone HOSTA
 # 2. on HOSTA as urep, run: gtfc add hostB
 ######################################################################
 elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
@@ -128,6 +129,7 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
 # 3. on hostB as urep, run: gtfc clone HOSTA
 ######################################################################
 elif [ "clone" = "$1" ]; then # run on clones
+  ssh urep@${2} "gtfc add $2"
   [ -d gitsync ] || git clone urep@${2}:~/gitsync
   [ -d gitsync ] || exit 1
   cd gitsync
@@ -138,7 +140,8 @@ elif [ "clone" = "$1" ]; then # run on clones
 ######################################################################
 # 4. on HOSTA as urep, run: sh gitsync/gitpullall.sh
 ######################################################################
-  ssh urep@${2} 'sh gitsync/gitpullall.sh'
+  ssh urep@${2} 'sh gitsync/gitpullall.sh' \
+    || echo "on $2 as urep, run: sh gitsync/gitpullall.sh"
 
 ######################################################################
 # 5. on HOSTA as urep, run: gtfc push hostB
