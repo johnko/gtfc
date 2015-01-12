@@ -138,7 +138,7 @@ elif [ "clone" = "$1" ]; then # run on clones
 ######################################################################
 # 4. on HOSTA as urep, run: sh gitsync/gitpullall.sh
 ######################################################################
-  ssh urep@${2} 'sh gitsync/gitpullall.sh'
+  echo 'on HOSTA as urep, run: sh gitsync/gitpullall.sh'
 
 ######################################################################
 # 5. on HOSTA as urep, run: gtfc push hostB
