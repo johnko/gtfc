@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150112-080940
+SCRIPTVERSION=150112-084450
 
 ######################################################################
 # ssh-keygen id_rsa
@@ -81,7 +81,11 @@ for i in \$(/usr/local/bin/git remote); do
   fi
 done
 setupauthkeys2
-crontab crontab.pullall
+if [ -f crontab.pullall.\$(hostname) ]; then
+  crontab crontab.pullall.\$(hostname)
+else
+  crontab crontab.pullall
+fi
 EOF
   cat >crontab.pullbare <<EOF
 * * * * * sh /usr/home/urep/gitsync/gitpullbare.sh
@@ -102,7 +106,11 @@ setupauthkeys2() {
 setupauthkeys2
 /usr/local/bin/git pull -q
 setupauthkeys2
-crontab crontab.pullbare
+if [ -f crontab.pullbare.\$(hostname) ]; then
+  crontab crontab.pullbare.\$(hostname)
+else
+  crontab crontab.pullbare
+fi
 EOF
 
   git add .
