@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150112-061321
+SCRIPTVERSION=150112-071917
 
 ########## if root has ~/.ssh/authorized_keys, install it to urep user
 # install -d -o urep -g urep /usr/home/urep/.ssh
@@ -41,9 +41,9 @@ SCRIPTVERSION=150112-061321
 cd ${HOME}
 
 [ -f ${HOME}/.ssh/id_rsa ] \
-|| ssh-keygen -N '' -t rsa -b 4096 -f ${HOME}/.ssh/id_rsa
+  || ssh-keygen -N '' -t rsa -b 4096 -f ${HOME}/.ssh/id_rsa
 [ -f ${HOME}/.ssh/authorized_keys2 ] \
-|| cp ${HOME}/.ssh/id_rsa.pub ${HOME}/.ssh/authorized_keys2
+  || cp ${HOME}/.ssh/id_rsa.pub ${HOME}/.ssh/authorized_keys2
 
 ######################################################################
 # 1. on HOSTA as urep, run: gtfc init
@@ -59,15 +59,13 @@ if [ "init" = "$1" ]; then
   git remote add ${2} urep@${2}:~/gitsync
   cp ~/.ssh/authorized_keys2 authorized_keys2
   cp .git/config config
-  cat >crontab.txt <<EOF
+  cat >crontab.pullall <<EOF
 * * * * * sh /usr/home/urep/gitsync/gitpullall.sh
 EOF
-
   cat >gitpullall.sh <<EOF
 #!/bin/sh
 pgrep -lf gitpullall.sh && exit 1
 cd /usr/home/urep/gitsync
-
 setupauthkeys2() {
   diff config .git/config || cp config .git/config
   diff \
@@ -78,11 +76,37 @@ setupauthkeys2() {
       /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmp
   cp /usr/home/urep/.tmp /usr/home/urep/.ssh/authorized_keys2
 }
-
 setupauthkeys2
-for i in \$(/usr/local/bin/git remote); do /usr/local/bin/git pull -q \$i master; done
+for i in \$(/usr/local/bin/git remote); do
+  if echo \$i | grep push >/dev/null 2>&1 ; then
+    /usr/local/bin/git push -q \$i master
+  else
+    /usr/local/bin/git pull -q \$i master
+  fi
+done
 setupauthkeys2
-crontab crontab.txt
+crontab crontab.pullall
+EOF
+  cat >crontab.pullbare <<EOF
+* * * * * sh /usr/home/urep/gitsync/gitpullbare.sh
+EOF
+  cat >gitpullbare.sh <<EOF
+#!/bin/sh
+pgrep -lf gitpullbare.sh && exit 1
+cd /usr/home/urep/gitsync
+setupauthkeys2() {
+  diff \
+    authorized_keys2 \
+    /usr/home/urep/.ssh/authorized_keys2 \
+    || cat \
+      authorized_keys2 \
+      /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmp
+  cp /usr/home/urep/.tmp /usr/home/urep/.ssh/authorized_keys2
+}
+setupauthkeys2
+/usr/local/bin/git pull
+setupauthkeys2
+crontab crontab.pullbare
 EOF
 
   git add .
@@ -105,18 +129,37 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
   # end of add
 
 ######################################################################
-# 3. on hostB as urep, run: gtfc HOSTA
+# 3. on hostB as urep, run: gtfc clone HOSTA
 ######################################################################
-else # run on clones
-  [ -d gitsync ] || git clone urep@${1}:~/gitsync
+elif [ "clone" = "$1" ]; then # run on clones
+  [ -d gitsync ] || git clone urep@${2}:~/gitsync
   [ -d gitsync ] || exit 1
   cd gitsync
   sh gitpullall.sh
   cp /usr/home/urep/.ssh/authorized_keys2 authorized_keys2
   git add .
   git commit -m "added `hostname` to authorized_keys2"
-fi
-
 ######################################################################
 # 4. on HOSTA as urep, run: sh gitsync/gitpullall.sh
 ######################################################################
+  ssh urep@${2} 'sh ~/gitsync/gitpullall.sh'
+
+######################################################################
+# 5. on HOSTA as urep, run: gtfc push hostB
+######################################################################
+elif [ "push" = "$1" ]; then
+  [ -d gitsync ] || exit 1
+  cd gitsync
+  git remote add push${2} urep@${2}:~/gitsyncpush
+  ssh urep@${2} 'git init --bare gitsyncpush'
+  while diff .git/config config ; do
+    sleep 1
+  done
+  cp .git/config config
+  git add .
+  git commit -m "added push$2 to config"
+  git push push${2} master
+  ssh urep@${2} 'git clone gitsyncpush gitsync'
+  # end of push
+
+fi
