@@ -1,5 +1,5 @@
 # gtfc
-git for cluster, naive synchronization (pull only) over ssh every minute (with crontab)
+git for cluster sync, naive synchronization (pull only) over ssh every minute (with crontab)
 
 # Quick Usage
 
@@ -12,12 +12,12 @@ Assuming you can ssh forward
 8.8.x.x public
 ```
 
-1) In a LAN, on `alpha`
+1) In a LAN, on a machine that can ssh into `alpha`
 ```
 ssh urep@alpha gtfc init alpha
 ```
 
-2) On `betasaurus`
+2) On a machine that can ssh into `betasaurus`
 ```
 ssh -A urep@betasaurus gtfc clone alpha
 ```
@@ -27,18 +27,18 @@ ssh -A urep@betasaurus gtfc clone alpha
 sh gitsync/gitpullall.sh
 ```
 
-4) On `alpha`, to push to `public`
+4) On a machine that can ssh into `alpha`, to push to `public`
 ```
 ssh -A urep@alpha gtfc push public
 ```
 
-5) On alpha or betasaurus
-
+5) On `alpha` or `betasaurus`, to add a commit to sync
+```
 cd gitsync
 date > testdate
 git add .
 git commit -m "add testdate"
-
+```
 Wait about 60 seconds for the other nodes to pull.
 
 # Long Usage
@@ -78,3 +78,12 @@ copy alpha:~/.ssh/id_rsa.pub to public:~/.ssh/authorized_keys2
 ```
 gtfc push public
 ```
+
+5) On `alpha` or `betasaurus`, to add a commit to sync
+```
+cd gitsync
+date > testdate
+git add .
+git commit -m "add testdate"
+```
+Wait about 60 seconds for the other nodes to pull.
