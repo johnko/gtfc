@@ -9,30 +9,21 @@ Assuming you can ssh forward
 ```
 192.168.0.2 alpha
 192.168.0.3 betasaurus
+192.168.0.4 caviar
+192.168.0.5 delta
 8.8.x.x public
 ```
 
-1) In a LAN, on a machine that can ssh into `alpha`
+Example session from deployment machine that can ssh into all hosts:
+
 ```
 ssh urep@alpha gtfc init alpha
+ssh -A urep@betasaurus gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh
+ssh -A urep@caviar gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh
+ssh -A urep@delta gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh
 ```
 
-2) On a machine that can ssh into `betasaurus`
-```
-ssh -A urep@betasaurus gtfc clone alpha
-```
-
-3) Back on `alpha`
-```
-sh gitsync/gitpullall.sh
-```
-
-4) On a machine that can ssh into `alpha`, to push to `public`
-```
-ssh -A urep@alpha gtfc push public
-```
-
-5) On `alpha` or `betasaurus`, to add a commit to sync
+On any host, to add a commit to sync
 ```
 cd gitsync
 date > testdate
