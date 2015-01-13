@@ -18,9 +18,9 @@ Example session from deployment machine that can ssh into all hosts:
 
 ```
 ssh urep@alpha gtfc init alpha
-ssh -A urep@betasaurus gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh
-ssh -A urep@caviar gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh
-ssh -A urep@delta gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh
+ssh -A urep@betasaurus gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh -f
+ssh -A urep@caviar gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh -f
+ssh -A urep@delta gtfc clone alpha ; ssh urep@alpha sh gitsync/gitpullall.sh -f
 ```
 
 On any host, to add a commit to sync
