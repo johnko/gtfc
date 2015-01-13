@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150113-045630
+SCRIPTVERSION=150113-050309
 
 ######################################################################
 # ssh-keygen id_rsa
@@ -66,20 +66,14 @@ fi
 cd /usr/home/urep/gitsync
 setupauthkeys2() {
   diff config .git/config || cp config .git/config
-  diff \
-    authorized_keys2 \
-    /usr/home/urep/.ssh/authorized_keys2 \
-    || cat \
-      authorized_keys2 \
-      /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmp
-  cp /usr/home/urep/.tmp /usr/home/urep/.ssh/authorized_keys2
-  diff \
-    known_hosts \
-    /usr/home/urep/.ssh/known_hosts \
-    || cat \
-      known_hosts \
-      /usr/home/urep/.ssh/known_hosts | sort -u > /usr/home/urep/.tmp
-  cp /usr/home/urep/.tmp /usr/home/urep/.ssh/known_hosts
+  if diff authorized_keys2 /usr/home/urep/.ssh/authorized_keys2 ; then
+    cat   authorized_keys2 /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmpa
+    cp /usr/home/urep/.tmpa /usr/home/urep/.ssh/authorized_keys2
+  fi
+  if diff known_hosts /usr/home/urep/.ssh/known_hosts ; then
+    cat   known_hosts /usr/home/urep/.ssh/known_hosts | sort -u > /usr/home/urep/.tmpk
+    cp /usr/home/urep/.tmpk /usr/home/urep/.ssh/known_hosts
+  fi
 }
 setupauthkeys2
 for i in \$(/usr/local/bin/git remote); do
@@ -106,20 +100,14 @@ if [ "\$1" != "-f" ]; then
 fi
 cd /usr/home/urep/gitsync
 setupauthkeys2() {
-  diff \
-    authorized_keys2 \
-    /usr/home/urep/.ssh/authorized_keys2 \
-    || cat \
-      authorized_keys2 \
-      /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmp
-  cp /usr/home/urep/.tmp /usr/home/urep/.ssh/authorized_keys2
-  diff \
-    known_hosts \
-    /usr/home/urep/.ssh/known_hosts \
-    || cat \
-      known_hosts \
-      /usr/home/urep/.ssh/known_hosts | sort -u > /usr/home/urep/.tmp
-  cp /usr/home/urep/.tmp /usr/home/urep/.ssh/known_hosts
+  if diff authorized_keys2 /usr/home/urep/.ssh/authorized_keys2 ; then
+    cat   authorized_keys2 /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmpa
+    cp /usr/home/urep/.tmpa /usr/home/urep/.ssh/authorized_keys2
+  fi
+  if diff known_hosts /usr/home/urep/.ssh/known_hosts ; then
+    cat   known_hosts /usr/home/urep/.ssh/known_hosts | sort -u > /usr/home/urep/.tmpk
+    cp /usr/home/urep/.tmpk /usr/home/urep/.ssh/known_hosts
+  fi
 }
 setupauthkeys2
 /usr/local/bin/git pull -q
