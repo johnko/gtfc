@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150112-084450
+SCRIPTVERSION=150113-032144
 
 ######################################################################
 # ssh-keygen id_rsa
@@ -53,7 +53,7 @@ if [ "init" = "$1" ]; then
   git config user.email "urep@localhost"
   git config user.name "urep"
   git remote add ${2} urep@${2}:~/gitsync
-  cp ~/.ssh/authorized_keys2 authorized_keys2
+  cp /usr/home/urep/.ssh/authorized_keys2 authorized_keys2
   cp .git/config config
   cat >crontab.pullall <<EOF
 * * * * * sh /usr/home/urep/gitsync/gitpullall.sh
@@ -71,6 +71,13 @@ setupauthkeys2() {
       authorized_keys2 \
       /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmp
   cp /usr/home/urep/.tmp /usr/home/urep/.ssh/authorized_keys2
+  diff \
+    known_hosts \
+    /usr/home/urep/.ssh/known_hosts \
+    || cat \
+      known_hosts \
+      /usr/home/urep/.ssh/known_hosts | sort -u > /usr/home/urep/.tmp
+  cp /usr/home/urep/.tmp /usr/home/urep/.ssh/known_hosts
 }
 setupauthkeys2
 for i in \$(/usr/local/bin/git remote); do
@@ -102,6 +109,13 @@ setupauthkeys2() {
       authorized_keys2 \
       /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmp
   cp /usr/home/urep/.tmp /usr/home/urep/.ssh/authorized_keys2
+  diff \
+    known_hosts \
+    /usr/home/urep/.ssh/known_hosts \
+    || cat \
+      known_hosts \
+      /usr/home/urep/.ssh/known_hosts | sort -u > /usr/home/urep/.tmp
+  cp /usr/home/urep/.tmp /usr/home/urep/.ssh/known_hosts
 }
 setupauthkeys2
 /usr/local/bin/git pull -q
@@ -112,9 +126,10 @@ else
   crontab crontab.pullbare
 fi
 EOF
-
+  sh gitpullall.sh
+  cp /usr/home/urep/.ssh/known_hosts known_hosts
   git add .
-  git commit -m first
+  git commit -m "added $2 to config, `hostname` to authorized_keys2, known_hosts"
   # end of init
 
 ######################################################################
@@ -143,8 +158,9 @@ elif [ "clone" = "$1" ]; then # run on clones
   cd gitsync
   sh gitpullall.sh
   cp /usr/home/urep/.ssh/authorized_keys2 authorized_keys2
+  cp /usr/home/urep/.ssh/known_hosts known_hosts
   git add .
-  git commit -m "added `hostname` to authorized_keys2"
+  git commit -m "added `hostname` to authorized_keys2, known_hosts"
 ######################################################################
 # 4. on HOSTA as urep, run: sh gitsync/gitpullall.sh
 ######################################################################
@@ -167,8 +183,9 @@ elif [ "push" = "$1" ]; then
     sleep 1
   done
   cp .git/config config
+  cp /usr/home/urep/.ssh/known_hosts known_hosts
   git add .
-  git commit -m "added push$2 to config"
+  git commit -m "added push$2 to config, $2 to known_hosts"
   git push push${2} master
   ssh urep@${2} 'git clone gitsyncpush gitsync'
   ssh urep@${2} 'sh gitsync/gitpullbare.sh'
