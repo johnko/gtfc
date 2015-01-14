@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150113-050502
+SCRIPTVERSION=150114-154421
 
 ######################################################################
 # ssh-keygen id_rsa
@@ -61,7 +61,7 @@ EOF
   cat >gitpullall.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
-  pgrep -lf gitpullall.sh && exit 1
+  pgrep -lf gitpullall.sh >/dev/null 2>&1 && exit 1
 fi
 cd /usr/home/urep/gitsync
 setupauthkeys2() {
@@ -96,7 +96,7 @@ EOF
   cat >gitpullbare.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
-  pgrep -lf gitpullbare.sh && exit 1
+  pgrep -lf gitpullbare.sh >/dev/null 2>&1 && exit 1
 fi
 cd /usr/home/urep/gitsync
 setupauthkeys2() {
