@@ -80,7 +80,7 @@ for i in \$(/usr/local/bin/git remote); do
   if echo \$i | grep push >/dev/null 2>&1 ; then
     /usr/local/bin/git push -q \$i master
   else
-    /usr/local/bin/git pull -q \$i master
+    /usr/local/bin/git pull -q --ff-only \$i master
   fi
 done
 setupauthkeys2
@@ -110,7 +110,7 @@ setupauthkeys2() {
   fi
 }
 setupauthkeys2
-/usr/local/bin/git pull -q
+/usr/local/bin/git pull -q --ff-only
 setupauthkeys2
 if [ -f crontab.pullbare.\$(hostname) ]; then
   crontab crontab.pullbare.\$(hostname)
