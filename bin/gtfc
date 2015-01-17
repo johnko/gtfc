@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150117-004355
+SCRIPTVERSION=150117-011949
 
 USER="urep"
 
@@ -75,16 +75,16 @@ EOF
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullall.sh >/dev/null 2>&1 && exit 1
 fi
-cd ${HOME}/${FOLDER}
+cd \${HOME}/\${FOLDER}
 setupauthkeys2() {
   diff config .git/config || cp config .git/config
-  if ! diff authorized_keys2 ${HOME}/.ssh/authorized_keys2 ; then
-    cat   authorized_keys2 ${HOME}/.ssh/id_rsa.pub | sort -u > ${HOME}/.tmpa
-    cp ${HOME}/.tmpa ${HOME}/.ssh/authorized_keys2
+  if ! diff authorized_keys2 \${HOME}/.ssh/authorized_keys2 ; then
+    echo "command=\"git-shell -c \\\\\"\\\$SSH_ORIGINAL_COMMAND\\\\\"\" \`cat \${HOME}/.ssh/id_rsa.pub\`" >\${HOME}/.tmpa
+    cat   authorized_keys2 \${HOME}/.tmpa | sort -u >>\${HOME}/.ssh/authorized_keys2
   fi
-  if ! diff known_hosts ${HOME}/.ssh/known_hosts ; then
-    cat   known_hosts ${HOME}/.ssh/known_hosts | sort -u > ${HOME}/.tmpk
-    cp ${HOME}/.tmpk ${HOME}/.ssh/known_hosts
+  if ! diff known_hosts \${HOME}/.ssh/known_hosts ; then
+    cat   known_hosts \${HOME}/.ssh/known_hosts | sort -u >\${HOME}/.tmpk
+    cp \${HOME}/.tmpk \${HOME}/.ssh/known_hosts
   fi
 }
 setupauthkeys2
@@ -110,15 +110,15 @@ EOF
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullbare.sh >/dev/null 2>&1 && exit 1
 fi
-cd ${HOME}/${FOLDER}
+cd \${HOME}/\${FOLDER}
 setupauthkeys2() {
-  if ! diff authorized_keys2 ${HOME}/.ssh/authorized_keys2 ; then
-    cat   authorized_keys2 ${HOME}/.ssh/id_rsa.pub | sort -u > ${HOME}/.tmpa
-    cp ${HOME}/.tmpa ${HOME}/.ssh/authorized_keys2
+  if ! diff authorized_keys2 \${HOME}/.ssh/authorized_keys2 ; then
+    echo "command=\"git-shell -c \\\\\"\\\$SSH_ORIGINAL_COMMAND\\\\\"\" \`cat \${HOME}/.ssh/id_rsa.pub\`" >\${HOME}/.tmpa
+    cat   authorized_keys2 \${HOME}/.tmpa | sort -u >>\${HOME}/.ssh/authorized_keys2
   fi
-  if ! diff known_hosts ${HOME}/.ssh/known_hosts ; then
-    cat   known_hosts ${HOME}/.ssh/known_hosts | sort -u > ${HOME}/.tmpk
-    cp ${HOME}/.tmpk ${HOME}/.ssh/known_hosts
+  if ! diff known_hosts \${HOME}/.ssh/known_hosts ; then
+    cat   known_hosts \${HOME}/.ssh/known_hosts | sort -u >\${HOME}/.tmpk
+    cp \${HOME}/.tmpk \${HOME}/.ssh/known_hosts
   fi
 }
 setupauthkeys2
