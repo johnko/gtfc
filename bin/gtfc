@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150114-154421
+SCRIPTVERSION=150117-004355
 
 ######################################################################
 # ssh-keygen id_rsa
@@ -42,28 +42,33 @@ cd ${HOME}
   || cp ${HOME}/.ssh/id_rsa.pub ${HOME}/.ssh/authorized_keys2
 
 ######################################################################
-# 1. on HOSTA as urep, run: gtfc init HOSTA
+# 1. on HOSTA as urep, run: gtfc init HOSTA folder
 ######################################################################
+FOLDER=$3
+if [ "x" = "x$FOLDER"]; then
+  FOLDER="gitsync"
+fi
+
 if [ "init" = "$1" ]; then
 
-  [ -d gitsync ] || git init gitsync
-  [ -d gitsync ] || exit 1
+  [ -d ${FOLDER} ] || git init ${FOLDER}
+  [ -d ${FOLDER} ] || exit 1
 
-  cd gitsync
+  cd ${FOLDER}
   git config user.email "urep@localhost"
   git config user.name "urep"
-  git remote add ${2} urep@${2}:~/gitsync
+  git remote add ${2} urep@${2}:~/${FOLDER}
   cp /usr/home/urep/.ssh/authorized_keys2 authorized_keys2
   cp .git/config config
   cat >crontab.pullall <<EOF
-* * * * * sh /usr/home/urep/gitsync/gitpullall.sh
+* * * * * sh /usr/home/urep/${FOLDER}/gitpullall.sh
 EOF
   cat >gitpullall.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullall.sh >/dev/null 2>&1 && exit 1
 fi
-cd /usr/home/urep/gitsync
+cd /usr/home/urep/${FOLDER}
 setupauthkeys2() {
   diff config .git/config || cp config .git/config
   if ! diff authorized_keys2 /usr/home/urep/.ssh/authorized_keys2 ; then
@@ -91,14 +96,14 @@ else
 fi
 EOF
   cat >crontab.pullbare <<EOF
-* * * * * sh /usr/home/urep/gitsync/gitpullbare.sh
+* * * * * sh /usr/home/urep/${FOLDER}/gitpullbare.sh
 EOF
   cat >gitpullbare.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullbare.sh >/dev/null 2>&1 && exit 1
 fi
-cd /usr/home/urep/gitsync
+cd /usr/home/urep/${FOLDER}
 setupauthkeys2() {
   if ! diff authorized_keys2 /usr/home/urep/.ssh/authorized_keys2 ; then
     cat   authorized_keys2 /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmpa
@@ -129,9 +134,9 @@ EOF
 # 2. on HOSTA as urep, run: gtfc add hostB
 ######################################################################
 elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
-  [ -d gitsync ] || exit 1
-  cd gitsync
-  git remote add ${2} urep@${2}:~/gitsync
+  [ -d ${FOLDER} ] || exit 1
+  cd ${FOLDER}
+  git remote add ${2} urep@${2}:~/${FOLDER}
   while diff .git/config config ; do
     sleep 1
   done
@@ -145,21 +150,21 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
 ######################################################################
 elif [ "clone" = "$1" ]; then # run on clones
   ssh urep@${2} "gtfc add `hostname`"
-  [ -d gitsync ] || git clone urep@${2}:~/gitsync
-  [ -d gitsync ] || exit 1
-  cd gitsync
+  [ -d ${FOLDER} ] || git clone urep@${2}:~/${FOLDER}
+  [ -d ${FOLDER} ] || exit 1
+  cd ${FOLDER}
   sh gitpullall.sh
   cp /usr/home/urep/.ssh/authorized_keys2 authorized_keys2
   cp /usr/home/urep/.ssh/known_hosts known_hosts
   git add .
   git commit -m "added `hostname` to authorized_keys2, known_hosts"
 ######################################################################
-# 4. on HOSTA as urep, run: sh gitsync/gitpullall.sh
+# 4. on HOSTA as urep, run: sh ${FOLDER}/gitpullall.sh
 ######################################################################
   cat <<EOF
 Can't run this for you because you may have ssh forwarding on
 .............................................
-  On urep@$2, run: sh gitsync/gitpullall.sh
+  On urep@$2, run: sh ${FOLDER}/gitpullall.sh
 .............................................
 EOF
 
@@ -167,10 +172,10 @@ EOF
 # 5. on HOSTA as urep, run: gtfc push hostB
 ######################################################################
 elif [ "push" = "$1" ]; then
-  [ -d gitsync ] || exit 1
-  cd gitsync
-  git remote add push${2} urep@${2}:~/gitsyncpush
-  ssh urep@${2} 'git init --bare gitsyncpush'
+  [ -d ${FOLDER} ] || exit 1
+  cd ${FOLDER}
+  git remote add push${2} urep@${2}:~/${FOLDER}push
+  ssh urep@${2} 'git init --bare ${FOLDER}push'
   while diff .git/config config ; do
     sleep 1
   done
@@ -179,8 +184,8 @@ elif [ "push" = "$1" ]; then
   git add .
   git commit -m "added push$2 to config, $2 to known_hosts"
   git push push${2} master
-  ssh urep@${2} 'git clone gitsyncpush gitsync'
-  ssh urep@${2} 'sh gitsync/gitpullbare.sh'
+  ssh urep@${2} 'git clone ${FOLDER}push ${FOLDER}'
+  ssh urep@${2} 'sh ${FOLDER}/gitpullbare.sh'
   # end of push
 
 fi
