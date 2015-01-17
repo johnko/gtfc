@@ -31,6 +31,8 @@
 ######################################################################
 SCRIPTVERSION=150117-004355
 
+USER="urep"
+
 ######################################################################
 # ssh-keygen id_rsa
 ######################################################################
@@ -39,10 +41,10 @@ cd ${HOME}
 [ -f ${HOME}/.ssh/id_rsa ] \
   || ssh-keygen -N '' -t rsa -b 4096 -f ${HOME}/.ssh/id_rsa
 [ -f ${HOME}/.ssh/authorized_keys2 ] \
-  || cp ${HOME}/.ssh/id_rsa.pub ${HOME}/.ssh/authorized_keys2
+  || echo "command=\"git-shell -c \\\"\$SSH_ORIGINAL_COMMAND\\\"\" `cat ${HOME}/.ssh/id_rsa.pub`" >${HOME}/.ssh/authorized_keys2
 
 ######################################################################
-# 1. on HOSTA as urep, run: gtfc init HOSTA folder
+# 1. on HOSTA as ${USER}, run: gtfc init HOSTA folder
 ######################################################################
 HOST=$2
 if [ "x" = "x$HOST"]; then
@@ -60,29 +62,29 @@ if [ "init" = "$1" ]; then
   [ -d ${FOLDER} ] || exit 1
 
   cd ${FOLDER}
-  git config user.email "urep@localhost"
-  git config user.name "urep"
-  git remote add ${HOST} urep@${HOST}:~/${FOLDER}
-  cp /usr/home/urep/.ssh/authorized_keys2 authorized_keys2
+  git config user.email "${USER}@localhost"
+  git config user.name "${USER}"
+  git remote add ${HOST} ${USER}@${HOST}:~/${FOLDER}
+  cp /usr/home/${USER}/.ssh/authorized_keys2 authorized_keys2
   cp .git/config config
   cat >crontab.pullall <<EOF
-* * * * * sh /usr/home/urep/${FOLDER}/gitpullall.sh
+* * * * * sh /usr/home/${USER}/${FOLDER}/gitpullall.sh
 EOF
   cat >gitpullall.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullall.sh >/dev/null 2>&1 && exit 1
 fi
-cd /usr/home/urep/${FOLDER}
+cd /usr/home/${USER}/${FOLDER}
 setupauthkeys2() {
   diff config .git/config || cp config .git/config
-  if ! diff authorized_keys2 /usr/home/urep/.ssh/authorized_keys2 ; then
-    cat   authorized_keys2 /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmpa
-    cp /usr/home/urep/.tmpa /usr/home/urep/.ssh/authorized_keys2
+  if ! diff authorized_keys2 /usr/home/${USER}/.ssh/authorized_keys2 ; then
+    cat   authorized_keys2 /usr/home/${USER}/.ssh/id_rsa.pub | sort -u > /usr/home/${USER}/.tmpa
+    cp /usr/home/${USER}/.tmpa /usr/home/${USER}/.ssh/authorized_keys2
   fi
-  if ! diff known_hosts /usr/home/urep/.ssh/known_hosts ; then
-    cat   known_hosts /usr/home/urep/.ssh/known_hosts | sort -u > /usr/home/urep/.tmpk
-    cp /usr/home/urep/.tmpk /usr/home/urep/.ssh/known_hosts
+  if ! diff known_hosts /usr/home/${USER}/.ssh/known_hosts ; then
+    cat   known_hosts /usr/home/${USER}/.ssh/known_hosts | sort -u > /usr/home/${USER}/.tmpk
+    cp /usr/home/${USER}/.tmpk /usr/home/${USER}/.ssh/known_hosts
   fi
 }
 setupauthkeys2
@@ -101,22 +103,22 @@ else
 fi
 EOF
   cat >crontab.pullbare <<EOF
-* * * * * sh /usr/home/urep/${FOLDER}/gitpullbare.sh
+* * * * * sh /usr/home/${USER}/${FOLDER}/gitpullbare.sh
 EOF
   cat >gitpullbare.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullbare.sh >/dev/null 2>&1 && exit 1
 fi
-cd /usr/home/urep/${FOLDER}
+cd /usr/home/${USER}/${FOLDER}
 setupauthkeys2() {
-  if ! diff authorized_keys2 /usr/home/urep/.ssh/authorized_keys2 ; then
-    cat   authorized_keys2 /usr/home/urep/.ssh/id_rsa.pub | sort -u > /usr/home/urep/.tmpa
-    cp /usr/home/urep/.tmpa /usr/home/urep/.ssh/authorized_keys2
+  if ! diff authorized_keys2 /usr/home/${USER}/.ssh/authorized_keys2 ; then
+    cat   authorized_keys2 /usr/home/${USER}/.ssh/id_rsa.pub | sort -u > /usr/home/${USER}/.tmpa
+    cp /usr/home/${USER}/.tmpa /usr/home/${USER}/.ssh/authorized_keys2
   fi
-  if ! diff known_hosts /usr/home/urep/.ssh/known_hosts ; then
-    cat   known_hosts /usr/home/urep/.ssh/known_hosts | sort -u > /usr/home/urep/.tmpk
-    cp /usr/home/urep/.tmpk /usr/home/urep/.ssh/known_hosts
+  if ! diff known_hosts /usr/home/${USER}/.ssh/known_hosts ; then
+    cat   known_hosts /usr/home/${USER}/.ssh/known_hosts | sort -u > /usr/home/${USER}/.tmpk
+    cp /usr/home/${USER}/.tmpk /usr/home/${USER}/.ssh/known_hosts
   fi
 }
 setupauthkeys2
@@ -129,19 +131,19 @@ else
 fi
 EOF
   sh gitpullall.sh
-  cp /usr/home/urep/.ssh/known_hosts known_hosts
+  cp /usr/home/${USER}/.ssh/known_hosts known_hosts
   git add .
   git commit -m "added ${HOST} to config, `hostname` to authorized_keys2, known_hosts"
   # end of init
 
 ######################################################################
-# This can be skipped if you ssh -A urep@hostB gtfc clone HOSTA
-# 2. on HOSTA as urep, run: gtfc add hostB
+# This can be skipped if you ssh -A ${USER}@hostB gtfc clone HOSTA
+# 2. on HOSTA as ${USER}, run: gtfc add hostB
 ######################################################################
 elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  git remote add ${HOST} urep@${HOST}:~/${FOLDER}
+  git remote add ${HOST} ${USER}@${HOST}:~/${FOLDER}
   while diff .git/config config ; do
     sleep 1
   done
@@ -151,46 +153,46 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
   # end of add
 
 ######################################################################
-# 3. on hostB as urep, run: gtfc clone HOSTA
+# 3. on hostB as ${USER}, run: gtfc clone HOSTA
 ######################################################################
 elif [ "clone" = "$1" ]; then # run on clones
-  ssh urep@${HOST} "gtfc add `hostname`"
-  [ -d ${FOLDER} ] || git clone urep@${HOST}:~/${FOLDER}
+  ssh ${USER}@${HOST} "gtfc add `hostname`"
+  [ -d ${FOLDER} ] || git clone ${USER}@${HOST}:~/${FOLDER}
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
   sh gitpullall.sh
-  cp /usr/home/urep/.ssh/authorized_keys2 authorized_keys2
-  cp /usr/home/urep/.ssh/known_hosts known_hosts
+  cp /usr/home/${USER}/.ssh/authorized_keys2 authorized_keys2
+  cp /usr/home/${USER}/.ssh/known_hosts known_hosts
   git add .
   git commit -m "added `hostname` to authorized_keys2, known_hosts"
 ######################################################################
-# 4. on HOSTA as urep, run: sh ${FOLDER}/gitpullall.sh
+# 4. on HOSTA as ${USER}, run: sh ${FOLDER}/gitpullall.sh
 ######################################################################
   cat <<EOF
 Can't run this for you because you may have ssh forwarding on
 .............................................
-  On urep@${HOST}, run: sh ${FOLDER}/gitpullall.sh
+  On ${USER}@${HOST}, run: sh ${FOLDER}/gitpullall.sh
 .............................................
 EOF
 
 ######################################################################
-# 5. on HOSTA as urep, run: gtfc push hostB
+# 5. on HOSTA as ${USER}, run: gtfc push hostB
 ######################################################################
 elif [ "push" = "$1" ]; then
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  git remote add push${HOST} urep@${HOST}:~/${FOLDER}push
-  ssh urep@${HOST} 'git init --bare ${FOLDER}push'
+  git remote add push${HOST} ${USER}@${HOST}:~/${FOLDER}push
+  ssh ${USER}@${HOST} 'git init --bare ${FOLDER}push'
   while diff .git/config config ; do
     sleep 1
   done
   cp .git/config config
-  cp /usr/home/urep/.ssh/known_hosts known_hosts
+  cp /usr/home/${USER}/.ssh/known_hosts known_hosts
   git add .
   git commit -m "added push${HOST} to config, ${HOST} to known_hosts"
   git push push${HOST} master
-  ssh urep@${HOST} 'git clone ${FOLDER}push ${FOLDER}'
-  ssh urep@${HOST} 'sh ${FOLDER}/gitpullbare.sh'
+  ssh ${USER}@${HOST} 'git clone ${FOLDER}push ${FOLDER}'
+  ssh ${USER}@${HOST} 'sh ${FOLDER}/gitpullbare.sh'
   # end of push
 
 fi
