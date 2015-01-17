@@ -65,26 +65,26 @@ if [ "init" = "$1" ]; then
   git config user.email "${USER}@localhost"
   git config user.name "${USER}"
   git remote add ${HOST} ${USER}@${HOST}:~/${FOLDER}
-  cp /usr/home/${USER}/.ssh/authorized_keys2 authorized_keys2
+  cp ${HOME}/.ssh/authorized_keys2 authorized_keys2
   cp .git/config config
   cat >crontab.pullall <<EOF
-* * * * * sh /usr/home/${USER}/${FOLDER}/gitpullall.sh
+* * * * * sh ${HOME}/${FOLDER}/gitpullall.sh
 EOF
   cat >gitpullall.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullall.sh >/dev/null 2>&1 && exit 1
 fi
-cd /usr/home/${USER}/${FOLDER}
+cd ${HOME}/${FOLDER}
 setupauthkeys2() {
   diff config .git/config || cp config .git/config
-  if ! diff authorized_keys2 /usr/home/${USER}/.ssh/authorized_keys2 ; then
-    cat   authorized_keys2 /usr/home/${USER}/.ssh/id_rsa.pub | sort -u > /usr/home/${USER}/.tmpa
-    cp /usr/home/${USER}/.tmpa /usr/home/${USER}/.ssh/authorized_keys2
+  if ! diff authorized_keys2 ${HOME}/.ssh/authorized_keys2 ; then
+    cat   authorized_keys2 ${HOME}/.ssh/id_rsa.pub | sort -u > ${HOME}/.tmpa
+    cp ${HOME}/.tmpa ${HOME}/.ssh/authorized_keys2
   fi
-  if ! diff known_hosts /usr/home/${USER}/.ssh/known_hosts ; then
-    cat   known_hosts /usr/home/${USER}/.ssh/known_hosts | sort -u > /usr/home/${USER}/.tmpk
-    cp /usr/home/${USER}/.tmpk /usr/home/${USER}/.ssh/known_hosts
+  if ! diff known_hosts ${HOME}/.ssh/known_hosts ; then
+    cat   known_hosts ${HOME}/.ssh/known_hosts | sort -u > ${HOME}/.tmpk
+    cp ${HOME}/.tmpk ${HOME}/.ssh/known_hosts
   fi
 }
 setupauthkeys2
@@ -103,22 +103,22 @@ else
 fi
 EOF
   cat >crontab.pullbare <<EOF
-* * * * * sh /usr/home/${USER}/${FOLDER}/gitpullbare.sh
+* * * * * sh ${HOME}/${FOLDER}/gitpullbare.sh
 EOF
   cat >gitpullbare.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullbare.sh >/dev/null 2>&1 && exit 1
 fi
-cd /usr/home/${USER}/${FOLDER}
+cd ${HOME}/${FOLDER}
 setupauthkeys2() {
-  if ! diff authorized_keys2 /usr/home/${USER}/.ssh/authorized_keys2 ; then
-    cat   authorized_keys2 /usr/home/${USER}/.ssh/id_rsa.pub | sort -u > /usr/home/${USER}/.tmpa
-    cp /usr/home/${USER}/.tmpa /usr/home/${USER}/.ssh/authorized_keys2
+  if ! diff authorized_keys2 ${HOME}/.ssh/authorized_keys2 ; then
+    cat   authorized_keys2 ${HOME}/.ssh/id_rsa.pub | sort -u > ${HOME}/.tmpa
+    cp ${HOME}/.tmpa ${HOME}/.ssh/authorized_keys2
   fi
-  if ! diff known_hosts /usr/home/${USER}/.ssh/known_hosts ; then
-    cat   known_hosts /usr/home/${USER}/.ssh/known_hosts | sort -u > /usr/home/${USER}/.tmpk
-    cp /usr/home/${USER}/.tmpk /usr/home/${USER}/.ssh/known_hosts
+  if ! diff known_hosts ${HOME}/.ssh/known_hosts ; then
+    cat   known_hosts ${HOME}/.ssh/known_hosts | sort -u > ${HOME}/.tmpk
+    cp ${HOME}/.tmpk ${HOME}/.ssh/known_hosts
   fi
 }
 setupauthkeys2
@@ -131,7 +131,7 @@ else
 fi
 EOF
   sh gitpullall.sh
-  cp /usr/home/${USER}/.ssh/known_hosts known_hosts
+  cp ${HOME}/.ssh/known_hosts known_hosts
   git add .
   git commit -m "added ${HOST} to config, `hostname` to authorized_keys2, known_hosts"
   # end of init
@@ -161,8 +161,8 @@ elif [ "clone" = "$1" ]; then # run on clones
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
   sh gitpullall.sh
-  cp /usr/home/${USER}/.ssh/authorized_keys2 authorized_keys2
-  cp /usr/home/${USER}/.ssh/known_hosts known_hosts
+  cp ${HOME}/.ssh/authorized_keys2 authorized_keys2
+  cp ${HOME}/.ssh/known_hosts known_hosts
   git add .
   git commit -m "added `hostname` to authorized_keys2, known_hosts"
 ######################################################################
@@ -187,7 +187,7 @@ elif [ "push" = "$1" ]; then
     sleep 1
   done
   cp .git/config config
-  cp /usr/home/${USER}/.ssh/known_hosts known_hosts
+  cp ${HOME}/.ssh/known_hosts known_hosts
   git add .
   git commit -m "added push${HOST} to config, ${HOST} to known_hosts"
   git push push${HOST} master
