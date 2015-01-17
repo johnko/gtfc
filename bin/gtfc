@@ -80,7 +80,7 @@ setupauthkeys2() {
   diff config .git/config || cp config .git/config
   if ! diff authorized_keys2 \${HOME}/.ssh/authorized_keys2 ; then
     echo "command=\"git-shell -c \\\\\"\\\$SSH_ORIGINAL_COMMAND\\\\\"\" \`cat \${HOME}/.ssh/id_rsa.pub\`" >\${HOME}/.tmpa
-    cat   authorized_keys2 \${HOME}/.tmpa | sort -u >>\${HOME}/.ssh/authorized_keys2
+    cat   authorized_keys2 \${HOME}/.tmpa | sort -u >\${HOME}/.ssh/authorized_keys2
   fi
   if ! diff known_hosts \${HOME}/.ssh/known_hosts ; then
     cat   known_hosts \${HOME}/.ssh/known_hosts | sort -u >\${HOME}/.tmpk
@@ -114,7 +114,7 @@ cd \${HOME}/${FOLDER}
 setupauthkeys2() {
   if ! diff authorized_keys2 \${HOME}/.ssh/authorized_keys2 ; then
     echo "command=\"git-shell -c \\\\\"\\\$SSH_ORIGINAL_COMMAND\\\\\"\" \`cat \${HOME}/.ssh/id_rsa.pub\`" >\${HOME}/.tmpa
-    cat   authorized_keys2 \${HOME}/.tmpa | sort -u >>\${HOME}/.ssh/authorized_keys2
+    cat   authorized_keys2 \${HOME}/.tmpa | sort -u >\${HOME}/.ssh/authorized_keys2
   fi
   if ! diff known_hosts \${HOME}/.ssh/known_hosts ; then
     cat   known_hosts \${HOME}/.ssh/known_hosts | sort -u >\${HOME}/.tmpk
