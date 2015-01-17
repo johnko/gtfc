@@ -75,7 +75,7 @@ EOF
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullall.sh >/dev/null 2>&1 && exit 1
 fi
-cd \${HOME}/\${FOLDER}
+cd \${HOME}/${FOLDER}
 setupauthkeys2() {
   diff config .git/config || cp config .git/config
   if ! diff authorized_keys2 \${HOME}/.ssh/authorized_keys2 ; then
@@ -110,7 +110,7 @@ EOF
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullbare.sh >/dev/null 2>&1 && exit 1
 fi
-cd \${HOME}/\${FOLDER}
+cd \${HOME}/${FOLDER}
 setupauthkeys2() {
   if ! diff authorized_keys2 \${HOME}/.ssh/authorized_keys2 ; then
     echo "command=\"git-shell -c \\\\\"\\\$SSH_ORIGINAL_COMMAND\\\\\"\" \`cat \${HOME}/.ssh/id_rsa.pub\`" >\${HOME}/.tmpa
