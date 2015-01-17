@@ -44,6 +44,11 @@ cd ${HOME}
 ######################################################################
 # 1. on HOSTA as urep, run: gtfc init HOSTA folder
 ######################################################################
+HOST=$2
+if [ "x" = "x$HOST"]; then
+  HOST="`hostname -s`"
+fi
+
 FOLDER=$3
 if [ "x" = "x$FOLDER"]; then
   FOLDER="gitsync"
@@ -57,7 +62,7 @@ if [ "init" = "$1" ]; then
   cd ${FOLDER}
   git config user.email "urep@localhost"
   git config user.name "urep"
-  git remote add ${2} urep@${2}:~/${FOLDER}
+  git remote add ${HOST} urep@${HOST}:~/${FOLDER}
   cp /usr/home/urep/.ssh/authorized_keys2 authorized_keys2
   cp .git/config config
   cat >crontab.pullall <<EOF
@@ -126,7 +131,7 @@ EOF
   sh gitpullall.sh
   cp /usr/home/urep/.ssh/known_hosts known_hosts
   git add .
-  git commit -m "added $2 to config, `hostname` to authorized_keys2, known_hosts"
+  git commit -m "added ${HOST} to config, `hostname` to authorized_keys2, known_hosts"
   # end of init
 
 ######################################################################
@@ -136,21 +141,21 @@ EOF
 elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  git remote add ${2} urep@${2}:~/${FOLDER}
+  git remote add ${HOST} urep@${HOST}:~/${FOLDER}
   while diff .git/config config ; do
     sleep 1
   done
   cp .git/config config
   git add .
-  git commit -m "added $2 to config"
+  git commit -m "added ${HOST} to config"
   # end of add
 
 ######################################################################
 # 3. on hostB as urep, run: gtfc clone HOSTA
 ######################################################################
 elif [ "clone" = "$1" ]; then # run on clones
-  ssh urep@${2} "gtfc add `hostname`"
-  [ -d ${FOLDER} ] || git clone urep@${2}:~/${FOLDER}
+  ssh urep@${HOST} "gtfc add `hostname`"
+  [ -d ${FOLDER} ] || git clone urep@${HOST}:~/${FOLDER}
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
   sh gitpullall.sh
@@ -164,7 +169,7 @@ elif [ "clone" = "$1" ]; then # run on clones
   cat <<EOF
 Can't run this for you because you may have ssh forwarding on
 .............................................
-  On urep@$2, run: sh ${FOLDER}/gitpullall.sh
+  On urep@${HOST}, run: sh ${FOLDER}/gitpullall.sh
 .............................................
 EOF
 
@@ -174,18 +179,18 @@ EOF
 elif [ "push" = "$1" ]; then
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  git remote add push${2} urep@${2}:~/${FOLDER}push
-  ssh urep@${2} 'git init --bare ${FOLDER}push'
+  git remote add push${HOST} urep@${HOST}:~/${FOLDER}push
+  ssh urep@${HOST} 'git init --bare ${FOLDER}push'
   while diff .git/config config ; do
     sleep 1
   done
   cp .git/config config
   cp /usr/home/urep/.ssh/known_hosts known_hosts
   git add .
-  git commit -m "added push$2 to config, $2 to known_hosts"
-  git push push${2} master
-  ssh urep@${2} 'git clone ${FOLDER}push ${FOLDER}'
-  ssh urep@${2} 'sh ${FOLDER}/gitpullbare.sh'
+  git commit -m "added push${HOST} to config, ${HOST} to known_hosts"
+  git push push${HOST} master
+  ssh urep@${HOST} 'git clone ${FOLDER}push ${FOLDER}'
+  ssh urep@${HOST} 'sh ${FOLDER}/gitpullbare.sh'
   # end of push
 
 fi
