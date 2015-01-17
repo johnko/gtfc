@@ -47,12 +47,12 @@ cd ${HOME}
 # 1. on HOSTA as ${USER}, run: gtfc init HOSTA folder
 ######################################################################
 HOST=$2
-if [ "x" = "x$HOST"]; then
+if [ "x" = "x$HOST" ]; then
   HOST="`hostname -s`"
 fi
 
 FOLDER=$3
-if [ "x" = "x$FOLDER"]; then
+if [ "x" = "x$FOLDER" ]; then
   FOLDER="gitsync"
 fi
 
