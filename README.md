@@ -34,15 +34,12 @@ Example session from deployment machine that can ssh into all hosts:
 ```
 ssh    urep@alpha      gtfc init  alpha      gitsync
 
-ssh    urep@alpha      gtfc add   betasaurus gitsync
 ssh -A urep@betasaurus gtfc clone alpha      gitsync
 ssh    urep@alpha      sh gitsync/gitpullall.sh -f
 
-ssh    urep@alpha      gtfc add   caviar gitsync
 ssh -A urep@caviar     gtfc clone alpha  gitsync
 ssh    urep@alpha      sh gitsync/gitpullall.sh -f
 
-ssh    urep@alpha      gtfc add   delta gitsync
 ssh -A urep@delta      gtfc clone alpha gitsync
 ssh    urep@alpha      sh gitsync/gitpullall.sh -f
 ```
