@@ -1,6 +1,21 @@
 # gtfc
 git for cluster sync, naive synchronization (pull only) over ssh every minute (with crontab)
 
+# How it works
+
+Using cron to schedule a task that: in a git repo, for each git remote, perform a git pull.
+
+# Properties
+
+Property                                   | Description
+-------------------------------------------|------------------
+Centralized aspect                         | Only the first node with unique/latest data will be central until another completes a pull.
+Decentralized/distributed storage          | Kind of. When all nodes are up to date, there is no central store because git repositories are mirrors. Akin to RAID1 mirror, but not to RAID5 span.
+Decentralized/distributed transfers        | Kind of. Nodes can pull from any other nodes that are ahead.
+Chunked data transfers from multiple hosts | No.
+Optimal use                                | Good for small files or text.
+Limitations                                | Bad for large files or binary.
+
 # Quick Usage
 
 Assuming you can ssh forward
