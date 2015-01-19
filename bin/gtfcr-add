@@ -16,7 +16,7 @@ gitcluster_add() {
     repo="gitsync"
   fi
   ssh -t -A urep@$second gtfc clone $first $repo
-  ssh -t urep@$first sh $repo/gitpullall.sh -f
+  ssh -t urep@$first sh $repo/.gtfc/gitpullall.sh -f
 }
 
 gitcluster_add $1 $2 $3
