@@ -32,19 +32,13 @@ Assuming you can ssh forward
 Example session from deployment machine that can ssh into all hosts:
 
 ```
-ssh    urep@alpha      gtfc init  alpha      gitsync
-
-ssh -A urep@betasaurus gtfc clone alpha      gitsync
-ssh    urep@alpha      sh gitsync/gitpullall.sh -f
-
-ssh -A urep@caviar     gtfc clone alpha  gitsync
-ssh    urep@alpha      sh gitsync/gitpullall.sh -f
-
-ssh -A urep@delta      gtfc clone alpha gitsync
-ssh    urep@alpha      sh gitsync/gitpullall.sh -f
+gtfcr-init alpha
+gtfcr-add alpha betasaurus
+gtfcr-add alpha caviar
+gtfcr-add alpha delta
 ```
 
-On any host, to add a commit to sync
+On any host as user `urep`, add a commit to sync
 ```
 cd gitsync
 date > testdate
@@ -52,6 +46,38 @@ git add .
 git commit -m "add testdate"
 ```
 Wait about 60 seconds for the other nodes to pull.
+
+# Can some hosts be read-only?
+
+Kind of. 
+
+Scenario 1
+```
+We can configure them to not pull from certain peers by
+removing the betasaurus entry in .gtfc/config which gets
+copied to .git/config
+
+For example: We can configure all peers to never
+pull from betasaurus because we think he's sketchy.
+```
+
+Scenario 2
+```
+We can configure a peer to never pull from anyone by
+clearing the urep user's crontab.
+
+For example: Maybe we want delta to pause or not be updated.
+```
+
+# What can be host specific configurations?
+
+In the `gitsync/.gtfc` folder/repo:
+
+- authorized_keys2.`hostname -s`
+- config.`hostname -s`
+- crontab.pullall.`hostname -s`
+- crontab.pullbare.`hostname -s`
+- known_hosts.`hostname -s`
 
 # Long Usage
 
