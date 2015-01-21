@@ -74,11 +74,11 @@ clearing the urep user's crontab.
 
 In the `gitsync/.gtfc` folder/repo:
 
-- authorized_keys2.`hostname -s`
-- config.`hostname -s`
-- crontab.pullall.`hostname -s`
-- crontab.pullbare.`hostname -s`
-- known_hosts.`hostname -s`
+- authorized_keys2.$hostname
+- config.$hostname
+- crontab.pullall.$hostname
+- crontab.pullbare.$hostname
+- known_hosts.$hostname
 
 # Long Usage
 
