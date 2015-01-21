@@ -29,9 +29,10 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150119-014303
+SCRIPTVERSION=150121-055759
 
 USER="urep"
+MYHOSTNAME="`hostname`"
 
 ######################################################################
 # ssh-keygen id_rsa
@@ -78,26 +79,37 @@ if [ "\$1" != "-f" ]; then
 fi
 cd \${HOME}/${FOLDER}
 setupauthkeys2() {
-  diff .gtfc/config .git/config || cp .gtfc/config .git/config
-  if ! diff .gtfc/authorized_keys2 \${HOME}/.ssh/authorized_keys2 ; then
+       GTFCCONFIG=.gtfc/config
+  [            -e .gtfc/config.\$(hostname) ] \
+    && GTFCCONFIG=.gtfc/config.\$(hostname)
+  diff \$GTFCCONFIG .git/config || cp \$GTFCCONFIG .git/config
+
+       GTFCAUTHKEYS=.gtfc/authorized_keys2
+  [              -e .gtfc/authorized_keys2.\$(hostname) ] \
+    && GTFCAUTHKEYS=.gtfc/authorized_keys2.\$(hostname)
+  if ! diff \$GTFCAUTHKEYS \${HOME}/.ssh/authorized_keys2 ; then
     echo "command=\"git-shell -c \\\\\"\\\$SSH_ORIGINAL_COMMAND\\\\\"\" \`cat \${HOME}/.ssh/id_rsa.pub\`" >\${HOME}/.tmpa
-    cat     .gtfc/authorized_keys2 \${HOME}/.tmpa | sort -u >\${HOME}/.ssh/authorized_keys2
+    cat     \$GTFCAUTHKEYS \${HOME}/.tmpa | sort -u >\${HOME}/.ssh/authorized_keys2
   fi
-  if ! diff .gtfc/known_hosts \${HOME}/.ssh/known_hosts ; then
-    cat     .gtfc/known_hosts \${HOME}/.ssh/known_hosts | sort -u >\${HOME}/.tmpk
+
+       GTFCKNOWNHOSTS=.gtfc/known_hosts
+  [                -e .gtfc/known_hosts.\$(hostname) ] \
+    && GTFCKNOWNHOSTS=.gtfc/known_hosts.\$(hostname)
+  if ! diff \$GTFCKNOWNHOSTS \${HOME}/.ssh/known_hosts ; then
+    cat     \$GTFCKNOWNHOSTS \${HOME}/.ssh/known_hosts | sort -u >\${HOME}/.tmpk
     cp \${HOME}/.tmpk \${HOME}/.ssh/known_hosts
   fi
 }
 setupauthkeys2
 for i in \$(/usr/local/bin/git remote); do
   if echo \$i | grep push >/dev/null 2>&1 ; then
-    /usr/local/bin/git push -q \$i master
+    /usr/local/bin/git push -q           \$i master
   else
     /usr/local/bin/git pull -q --ff-only \$i master
   fi
 done
 setupauthkeys2
-if [ -f .gtfc/crontab.pullall.\$(hostname) ]; then
+if [   -e .gtfc/crontab.pullall.\$(hostname) ]; then
   crontab .gtfc/crontab.pullall.\$(hostname)
 else
   crontab .gtfc/crontab.pullall
@@ -113,19 +125,26 @@ if [ "\$1" != "-f" ]; then
 fi
 cd \${HOME}/${FOLDER}
 setupauthkeys2() {
-  if ! diff .gtfc/authorized_keys2 \${HOME}/.ssh/authorized_keys2 ; then
+       GTFCAUTHKEYS=.gtfc/authorized_keys2
+  [              -e .gtfc/authorized_keys2.\$(hostname) ] \
+    && GTFCAUTHKEYS=.gtfc/authorized_keys2.\$(hostname)
+  if ! diff \$GTFCAUTHKEYS \${HOME}/.ssh/authorized_keys2 ; then
     echo "command=\"git-shell -c \\\\\"\\\$SSH_ORIGINAL_COMMAND\\\\\"\" \`cat \${HOME}/.ssh/id_rsa.pub\`" >\${HOME}/.tmpa
-    cat     .gtfc/authorized_keys2 \${HOME}/.tmpa | sort -u >\${HOME}/.ssh/authorized_keys2
+    cat     \$GTFCAUTHKEYS \${HOME}/.tmpa | sort -u >\${HOME}/.ssh/authorized_keys2
   fi
-  if ! diff .gtfc/known_hosts \${HOME}/.ssh/known_hosts ; then
-    cat     .gtfc/known_hosts \${HOME}/.ssh/known_hosts | sort -u >\${HOME}/.tmpk
+
+       GTFCKNOWNHOSTS=.gtfc/known_hosts
+  [                -e .gtfc/known_hosts.\$(hostname) ] \
+    && GTFCKNOWNHOSTS=.gtfc/known_hosts.\$(hostname)
+  if ! diff \$GTFCKNOWNHOSTS \${HOME}/.ssh/known_hosts ; then
+    cat     \$GTFCKNOWNHOSTS \${HOME}/.ssh/known_hosts | sort -u >\${HOME}/.tmpk
     cp \${HOME}/.tmpk \${HOME}/.ssh/known_hosts
   fi
 }
 setupauthkeys2
 /usr/local/bin/git pull -q --ff-only
 setupauthkeys2
-if [ -f .gtfc/crontab.pullbare.\$(hostname) ]; then
+if [   -e .gtfc/crontab.pullbare.\$(hostname) ]; then
   crontab .gtfc/crontab.pullbare.\$(hostname)
 else
   crontab .gtfc/crontab.pullbare
@@ -134,7 +153,7 @@ EOF
   sh .gtfc/gitpullall.sh
   cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts
   git add .
-  git commit -m "added ${HOST} to config, `hostname` to authorized_keys2, known_hosts"
+  git commit -m "added ${HOST} to config, ${MYHOSTNAME} to authorized_keys2, known_hosts"
   # end of init
 
 ######################################################################
@@ -157,27 +176,34 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
 # 3. on hostB as ${USER}, run: gtfc clone HOSTA
 ######################################################################
 elif [ "clone" = "$1" ]; then # run on clones
-  ssh -t ${USER}@${HOST} "gtfc add `hostname -s`"
+  ssh -t ${USER}@${HOST} "gtfc add ${MYHOSTNAME}"
   [ -d ${FOLDER} ] || git clone ${USER}@${HOST}:~/${FOLDER}
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  sh .gtfc/gitpullall.sh
-  cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2
-  cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts
+  if [ -e .gtfc/gitpullall.sh.${MYHOSTNAME} ]; then
+       sh .gtfc/gitpullall.sh.${MYHOSTNAME}
+  else
+       sh .gtfc/gitpullall.sh
+  fi
+  if [                            -e .gtfc/authorized_keys2.${MYHOSTNAME} ]; then
+    cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2.${MYHOSTNAME}
+  else
+    cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2
+  fi
+  if [                       -e .gtfc/known_hosts.${MYHOSTNAME} ]; then
+    cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts.${MYHOSTNAME}
+  else
+    cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts
+  fi
   git add .
   git commit -m "added `hostname` to authorized_keys2, known_hosts"
 ######################################################################
-# 4. on HOSTA as ${USER}, run: sh ${FOLDER}/.gtfc/gitpullall.sh
+# 4. on HOSTA as ${USER}, run: sh ${FOLDER}/.gtfc/gitpullall.sh -f
+# this may be run by gtfcr-add
 ######################################################################
-  cat <<EOF
-Can't run this for you because you may have ssh forwarding on
-.............................................
-  On ${USER}@${HOST}, run: sh ${FOLDER}/.gtfc/gitpullall.sh
-.............................................
-EOF
 
 ######################################################################
-# 5. on HOSTA as ${USER}, run: gtfc push hostB
+# 5. optional: on HOSTA as ${USER}, run: gtfc push hostB
 ######################################################################
 elif [ "push" = "$1" ]; then
   [ -d ${FOLDER} ] || exit 1
