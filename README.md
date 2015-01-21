@@ -53,20 +53,21 @@ Kind of.
 
 Scenario 1
 ```
-We can configure them to not pull from certain peers by
-removing the betasaurus entry in .gtfc/config which gets
-copied to .git/config
-
 For example: We can configure all peers to never
 pull from betasaurus because we think he's sketchy.
+
+We can configure them to not pull from certain peers by
+removing the betasaurus entry in .gtfc/config which gets
+copied to .git/config or even just revoke his key
+from authorized_keys2.
 ```
 
 Scenario 2
 ```
+For example: Maybe we want delta to pause or not be updated.
+
 We can configure a peer to never pull from anyone by
 clearing the urep user's crontab.
-
-For example: Maybe we want delta to pause or not be updated.
 ```
 
 # What can be host specific configurations?
