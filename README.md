@@ -108,7 +108,7 @@ copy alpha:~/.ssh/id_rsa.pub to betasaurus:~/.ssh/authorized_keys2
 
 3) Back on `alpha`
 ```
-sh gitsync/gitpullall.sh
+sh gitsync/gitpullall.sh -f
 ```
 
 copy alpha:~/.ssh/id_rsa.pub to public:~/.ssh/authorized_keys2
