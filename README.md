@@ -14,7 +14,7 @@ Decentralized/distributed storage          | Kind of. When all nodes are up to d
 Decentralized/distributed transfers        | Kind of. Nodes can pull from any other nodes that are ahead.
 Chunked data transfers from multiple hosts | No.
 Optimal use                                | Good for small files or text.
-Limitations                                | Bad for large files or binary. Sync based on git commits, not files.
+Limitations                                | Bad for large files or binary. Sync based on git commits, not files. Since we use authorized_keys2 to let peers in, make sure to have different users for different repos if you need to restrict peers.
 
 # Quick Usage
 
