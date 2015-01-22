@@ -31,7 +31,7 @@
 ######################################################################
 SCRIPTVERSION=150121-055759
 
-USER="urep"
+MYUSER="urep"
 MYHOSTNAME="`hostname`"
 
 ######################################################################
@@ -45,7 +45,7 @@ cd ${HOME}
   || echo "command=\"git-shell -c \\\"\$SSH_ORIGINAL_COMMAND\\\"\" `cat ${HOME}/.ssh/id_rsa.pub`" >${HOME}/.ssh/authorized_keys2
 
 ######################################################################
-# 1. on HOSTA as ${USER}, run: gtfc init HOSTA folder
+# 1. on HOSTA as ${MYUSER}, run: gtfc init HOSTA folder
 ######################################################################
 HOST=$2
 if [ "x" = "x$HOST" ]; then
@@ -64,9 +64,9 @@ if [ "init" = "$1" ]; then
 
   cd ${FOLDER}
   mkdir .gtfc
-  git config user.email "${USER}@localhost"
-  git config user.name "${USER}"
-  git remote add ${HOST} ${USER}@${HOST}:~/${FOLDER}
+  git config user.email "${MYUSER}@localhost"
+  git config user.name "${MYUSER}"
+  git remote add ${HOST} ${MYUSER}@${HOST}:~/${FOLDER}
   cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2
   cp .git/config .gtfc/config
   cat >.gtfc/crontab.pullall <<EOF
@@ -157,13 +157,13 @@ EOF
   # end of init
 
 ######################################################################
-# This can be skipped if you ssh -A ${USER}@hostB gtfc clone HOSTA
-# 2. on HOSTA as ${USER}, run: gtfc add hostB
+# This can be skipped if you ssh -A ${MYUSER}@hostB gtfc clone HOSTA
+# 2. on HOSTA as ${MYUSER}, run: gtfc add hostB
 ######################################################################
 elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  git remote add ${HOST} ${USER}@${HOST}:~/${FOLDER}
+  git remote add ${HOST} ${MYUSER}@${HOST}:~/${FOLDER}
   while diff .git/config .gtfc/config ; do
     sleep 1
   done
@@ -173,11 +173,11 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
   # end of add
 
 ######################################################################
-# 3. on hostB as ${USER}, run: gtfc clone HOSTA
+# 3. on hostB as ${MYUSER}, run: gtfc clone HOSTA
 ######################################################################
 elif [ "clone" = "$1" ]; then # run on clones
-  ssh -t ${USER}@${HOST} "gtfc add ${MYHOSTNAME}"
-  [ -d ${FOLDER} ] || git clone ${USER}@${HOST}:~/${FOLDER}
+  ssh -t ${MYUSER}@${HOST} "gtfc add ${MYHOSTNAME}"
+  [ -d ${FOLDER} ] || git clone ${MYUSER}@${HOST}:~/${FOLDER}
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
   if [ -e .gtfc/gitpullall.sh.${MYHOSTNAME} ]; then
@@ -198,18 +198,18 @@ elif [ "clone" = "$1" ]; then # run on clones
   git add .
   git commit -m "added `hostname` to authorized_keys2, known_hosts"
 ######################################################################
-# 4. on HOSTA as ${USER}, run: sh ${FOLDER}/.gtfc/gitpullall.sh -f
+# 4. on HOSTA as ${MYUSER}, run: sh ${FOLDER}/.gtfc/gitpullall.sh -f
 # this may be run by gtfcr-add
 ######################################################################
 
 ######################################################################
-# 5. optional: on HOSTA as ${USER}, run: gtfc push hostB
+# 5. optional: on HOSTA as ${MYUSER}, run: gtfc push hostB
 ######################################################################
 elif [ "push" = "$1" ]; then
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  git remote add push${HOST} ${USER}@${HOST}:~/${FOLDER}push
-  ssh ${USER}@${HOST} 'git init --bare ${FOLDER}push'
+  git remote add push${HOST} ${MYUSER}@${HOST}:~/${FOLDER}push
+  ssh ${MYUSER}@${HOST} 'git init --bare ${FOLDER}push'
   while diff .git/config .gtfc/config ; do
     sleep 1
   done
@@ -218,8 +218,8 @@ elif [ "push" = "$1" ]; then
   git add .
   git commit -m "added push${HOST} to config, ${HOST} to known_hosts"
   git push push${HOST} master
-  ssh ${USER}@${HOST} 'git clone ${FOLDER}push ${FOLDER}'
-  ssh ${USER}@${HOST} 'sh ${FOLDER}/.gtfc/gitpullbare.sh'
+  ssh ${MYUSER}@${HOST} 'git clone ${FOLDER}push ${FOLDER}'
+  ssh ${MYUSER}@${HOST} 'sh ${FOLDER}/.gtfc/gitpullbare.sh'
   # end of push
 
 fi
