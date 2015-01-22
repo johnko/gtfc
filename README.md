@@ -113,12 +113,7 @@ sh gitsync/gitpullall.sh
 
 copy alpha:~/.ssh/id_rsa.pub to public:~/.ssh/authorized_keys2
 
-4) On `alpha`, to push to `public`
-```
-gtfc push public
-```
-
-5) On `alpha` or `betasaurus`, to add a commit to sync
+4) On `alpha` or `betasaurus`, to add a commit to sync
 ```
 cd gitsync
 date > testdate
