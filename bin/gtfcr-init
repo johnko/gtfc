@@ -3,6 +3,16 @@
 # gtfc init
 
 gitcluster_init() {
+  PEERPORT="22"
+  TOSPLIT=$1
+  if [ "x" != "x${TOSPLIT%@*}" ]; then
+    MYUSER="${TOSPLIT%@*}"
+  fi
+  HOSTANDPORT="${TOSPLIT#*@}"
+  if [ "x" != "x${HOSTANDPORT}" ]; then
+    HOST="${HOSTANDPORT%:*}"
+    PEERPORT="${HOSTANDPORT#*:}"
+  fi
   first=$1
   repo=$2
 
@@ -15,7 +25,7 @@ gitcluster_init() {
   elif [ "x" = "x$repo" ]; then
     repo="gitsync"
   fi
-  ssh -t urep@$first gtfc init $first $repo
+  ssh -t -p $PEERPORT urep@$HOST gtfc init $first $repo
 
 }
 
