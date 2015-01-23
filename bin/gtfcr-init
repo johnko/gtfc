@@ -21,7 +21,7 @@ gitcluster_init() {
     echo "ERROR: missing host1" >&2
     exit 1
   elif [ "x" = "x$repo" ]; then
-    repo="gitsync"
+    repo="~/gitsync"
   fi
   ssh -t -p $PEERPORT1 $MYUSER1@$HOST1 gtfc init $1 $repo
 
