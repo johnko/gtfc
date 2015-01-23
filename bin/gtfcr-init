@@ -14,8 +14,10 @@ gitcluster_init() {
   if [ "x" != "x${HOSTANDPORT1%:*}" ]; then
     HOST1="${HOSTANDPORT1%:*}"
   fi
-  if [ "x" != "${HOSTANDPORT1#*:}" ]; then
-    PEERPORT1="${HOSTANDPORT1#*:}"
+  if grep ':' ${HOSTANDPORT1} >/dev/null 2>&1 ; then
+    if [ "x" != "${HOSTANDPORT1#*:}" ]; then
+      PEERPORT1="${HOSTANDPORT1#*:}"
+    fi
   fi
   if [ "x" = "x$HOST1" ]; then
     echo "ERROR: missing host1" >&2
