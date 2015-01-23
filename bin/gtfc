@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150121-055759
+SCRIPTVERSION=150123-005829
 
 MYUSER="urep"
 MYHOSTNAME="`hostname`"
@@ -75,7 +75,7 @@ if [ "init" = "$1" ]; then
   mkdir .gtfc
   git config user.email "${MYUSER}@localhost"
   git config user.name "${MYUSER}"
-  git remote add ${HOST} ${MYUSER}@${HOST}:~/${FOLDER}
+  git remote add ${HOST} ssh://${MYUSER}@${HOST}:${PEERPORT}/${FOLDER}
   cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2
   cp .git/config .gtfc/config
   cat >.gtfc/crontab.pullall <<EOF
@@ -172,7 +172,7 @@ EOF
 elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  git remote add ${HOST} ${MYUSER}@${HOST}:~/${FOLDER}
+  git remote add ${HOST} ssh://${MYUSER}@${HOST}:${PEERPORT}/${FOLDER}
   while diff .git/config .gtfc/config ; do
     sleep 1
   done
@@ -186,7 +186,7 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
 ######################################################################
 elif [ "clone" = "$1" ]; then # run on clones
   ssh -t ${MYUSER}@${HOST} "gtfc add ${MYHOSTNAME}"
-  [ -d ${FOLDER} ] || git clone ${MYUSER}@${HOST}:~/${FOLDER}
+  [ -d ${FOLDER} ] || git clone ssh://${MYUSER}@${HOST}:${PEERPORT}/${FOLDER}
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
   if [ -e .gtfc/gitpullall.sh.${MYHOSTNAME} ]; then
@@ -217,7 +217,7 @@ elif [ "clone" = "$1" ]; then # run on clones
 elif [ "push" = "$1" ]; then
   [ -d ${FOLDER} ] || exit 1
   cd ${FOLDER}
-  git remote add push${HOST} ${MYUSER}@${HOST}:~/${FOLDER}push
+  git remote add push${HOST} ssh://${MYUSER}@${HOST}:${PEERPORT}/${FOLDER}push
   ssh ${MYUSER}@${HOST} 'git init --bare ${FOLDER}push'
   while diff .git/config .gtfc/config ; do
     sleep 1
