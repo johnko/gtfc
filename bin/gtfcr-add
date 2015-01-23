@@ -47,8 +47,8 @@ gitcluster_add() {
   elif [ "x" = "x$repo" ]; then
     repo="~/gitsync"
   fi
-  ssh -t -A -p $PEERPORT2 $MYUSER2@$HOST2 gtfc clone $1 $repo
-  ssh -t    -p $PEERPORT1 $MYUSER1@$HOST1 sh $repo/.gtfc/gitpullall.sh -f
+  ssh -t -A -p $PEERPORT2 $MYUSER2@$HOST2 "gtfc clone $1 $repo"
+  ssh -t    -p $PEERPORT1 $MYUSER1@$HOST1 "sh $repo/.gtfc/gitpullall.sh -f"
 }
 
 gitcluster_add $1 $2 $3
