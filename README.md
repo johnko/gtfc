@@ -33,7 +33,7 @@ Example session from deployment machine that can ssh into all hosts:
 
 ```
 gtfcr-init alpha
-gtfcr-add alpha betasaurus
+gtfcr-add alpha betasaurus ~/gitsync
 gtfcr-add alpha caviar
 gtfcr-add alpha delta
 ```
