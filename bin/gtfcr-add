@@ -37,7 +37,7 @@ gitcluster_add() {
     echo "ERROR: missing host2" >&2
     exit 1
   elif [ "x" = "x$repo" ]; then
-    repo="gitsync"
+    repo="~/gitsync"
   fi
   ssh -t -A -p $PEERPORT2 $MYUSER2@$HOST2 gtfc clone $1 $repo
   ssh -t    -p $PEERPORT1 $MYUSER1@$HOST1 sh $repo/.gtfc/gitpullall.sh -f
