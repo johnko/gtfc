@@ -3,14 +3,17 @@
 # gtfc add
 
 gitcluster_add() {
+  MYUSER1="urep"
+  MYUSER2="urep"
   PEERPORT1="22"
   TOSPLIT=$1
+  repo=$3
   if [ "x" != "x${TOSPLIT%@*}" ]; then
     MYUSER1="${TOSPLIT%@*}"
   fi
   HOSTANDPORT1="${TOSPLIT#*@}"
   if [ "x" != "x${HOSTANDPORT1%:*}" ]; then
-         HOST1="${HOSTANDPORT1%:*}"
+    HOST1="${HOSTANDPORT1%:*}"
   fi
   if [ "x" != "${HOSTANDPORT1#*:}" ]; then
     PEERPORT1="${HOSTANDPORT1#*:}"
@@ -18,22 +21,20 @@ gitcluster_add() {
   PEERPORT2="22"
   TOSPLIT=$2
   if [ "x" != "x${TOSPLIT%@*}" ]; then
-       MYUSER2="${TOSPLIT%@*}"
+    MYUSER2="${TOSPLIT%@*}"
   fi
   HOSTANDPORT2="${TOSPLIT#*@}"
   if [ "x" != "x${HOSTANDPORT2%:*}" ]; then
-         HOST2="${HOSTANDPORT2%:*}"
+    HOST2="${HOSTANDPORT2%:*}"
   fi
   if [ "x" != "${HOSTANDPORT2#*:}" ]; then
     PEERPORT2="${HOSTANDPORT2#*:}"
   fi
-  second=$2
-  repo=$3
   if [ "x" = "x$HOST1" ]; then
-    echo "ERROR: missing arg" >&2
+    echo "ERROR: missing host1" >&2
     exit 1
   elif [ "x" = "x$HOST2" ]; then
-    echo "ERROR: missing arg" >&2
+    echo "ERROR: missing host2" >&2
     exit 1
   elif [ "x" = "x$repo" ]; then
     repo="gitsync"
