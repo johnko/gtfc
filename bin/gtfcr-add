@@ -15,8 +15,10 @@ gitcluster_add() {
   if [ "x" != "x${HOSTANDPORT1%:*}" ]; then
     HOST1="${HOSTANDPORT1%:*}"
   fi
-  if [ "x" != "${HOSTANDPORT1#*:}" ]; then
-    PEERPORT1="${HOSTANDPORT1#*:}"
+  if grep ':' ${HOSTANDPORT1} >/dev/null 2>&1 ; then
+    if [ "x" != "${HOSTANDPORT1#*:}" ]; then
+      PEERPORT1="${HOSTANDPORT1#*:}"
+    fi
   fi
   PEERPORT2="22"
   TOSPLIT=$2
@@ -27,8 +29,10 @@ gitcluster_add() {
   if [ "x" != "x${HOSTANDPORT2%:*}" ]; then
     HOST2="${HOSTANDPORT2%:*}"
   fi
-  if [ "x" != "${HOSTANDPORT2#*:}" ]; then
-    PEERPORT2="${HOSTANDPORT2#*:}"
+  if grep ':' ${HOSTANDPORT2} >/dev/null 2>&1 ; then
+    if [ "x" != "${HOSTANDPORT2#*:}" ]; then
+      PEERPORT2="${HOSTANDPORT2#*:}"
+    fi
   fi
   if [ "x" = "x$HOST1" ]; then
     echo "ERROR: missing host1" >&2
