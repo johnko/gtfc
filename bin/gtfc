@@ -33,6 +33,7 @@ SCRIPTVERSION=150121-055759
 
 MYUSER="urep"
 MYHOSTNAME="`hostname`"
+PEERPORT="22"
 
 ######################################################################
 # ssh-keygen id_rsa
@@ -47,7 +48,15 @@ cd ${HOME}
 ######################################################################
 # 1. on HOSTA as ${MYUSER}, run: gtfc init HOSTA folder
 ######################################################################
-HOST=$2
+TOSPLIT=$2
+if [ "x" != "x${TOSPLIT%@*}" ]; then
+  MYUSER="${TOSPLIT%@*}"
+fi
+HOSTANDPORT="${TOSPLIT#*@}"
+if [ "x" != "x${HOSTANDPORT}" ]; then
+  HOST="${HOSTANDPORT%:*}"
+  PEERPORT="${HOSTANDPORT#*:}"
+fi
 if [ "x" = "x$HOST" ]; then
   HOST="`hostname -s`"
 fi
