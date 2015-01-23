@@ -85,14 +85,14 @@ if [ "init" = "$1" ]; then
   cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2
   cp .git/config .gtfc/config
   cat >.gtfc/crontab.pullall <<EOF
-* * * * * sh ${HOME}/${FOLDER}/.gtfc/gitpullall.sh
+* * * * * sh ${FOLDER}/.gtfc/gitpullall.sh
 EOF
   cat >.gtfc/gitpullall.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullall.sh >/dev/null 2>&1 && exit 1
 fi
-cd \${HOME}/${FOLDER}
+cd ${FOLDER}
 setupauthkeys2() {
        GTFCCONFIG=.gtfc/config
   [            -e .gtfc/config.\$(hostname) ] \
@@ -131,14 +131,14 @@ else
 fi
 EOF
   cat >.gtfc/crontab.pullbare <<EOF
-* * * * * sh ${HOME}/${FOLDER}/.gtfc/gitpullbare.sh
+* * * * * sh ${FOLDER}/.gtfc/gitpullbare.sh
 EOF
   cat >.gtfc/gitpullbare.sh <<EOF
 #!/bin/sh
 if [ "\$1" != "-f" ]; then
   pgrep -lf gitpullbare.sh >/dev/null 2>&1 && exit 1
 fi
-cd \${HOME}/${FOLDER}
+cd ${FOLDER}
 setupauthkeys2() {
        GTFCAUTHKEYS=.gtfc/authorized_keys2
   [              -e .gtfc/authorized_keys2.\$(hostname) ] \
