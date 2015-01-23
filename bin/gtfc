@@ -49,8 +49,10 @@ cd ${HOME}
 # 1. on HOSTA as ${MYUSER}, run: gtfc init HOSTA folder
 ######################################################################
 TOSPLIT=$2
-if [ "x" != "x${TOSPLIT%@*}" ]; then
-  MYUSER="${TOSPLIT%@*}"
+if grep '@' ${TOSPLIT} >/dev/null 2>&1 ; then
+  if [ "x" != "x${TOSPLIT%@*}" ]; then
+    MYUSER="${TOSPLIT%@*}"
+  fi
 fi
 HOSTANDPORT="${TOSPLIT#*@}"
 if [ "x" != "x${HOSTANDPORT}" ]; then
