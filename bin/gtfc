@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150123-152840
+SCRIPTVERSION=150123-163028
 
 MYUSER="urep"
 MYHOSTNAME="`hostname`"
@@ -69,7 +69,7 @@ fi
 
 FOLDER=$3
 if [ "x" = "x$FOLDER" ]; then
-  FOLDER="~/gitsync"
+  FOLDER="${HOME}/gitsync"
 fi
 
 if [ "init" = "$1" ]; then
