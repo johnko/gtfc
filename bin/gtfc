@@ -55,7 +55,11 @@ fi
 HOSTANDPORT="${TOSPLIT#*@}"
 if [ "x" != "x${HOSTANDPORT}" ]; then
   HOST="${HOSTANDPORT%:*}"
-  PEERPORT="${HOSTANDPORT#*:}"
+fi
+if grep ':' ${HOSTANDPORT} >/dev/null 2>&1 ; then
+  if [ "x" != "${HOSTANDPORT#*:}" ]; then
+    PEERPORT="${HOSTANDPORT#*:}"
+  fi
 fi
 if [ "x" = "x$HOST" ]; then
   HOST="`hostname -s`"
