@@ -29,7 +29,7 @@ Assuming you can ssh forward
 8.8.x.x public
 ```
 
-Example session from deployment machine that can ssh into all hosts:
+Example session from deployment machine that can ssh into all hosts as the `urep` user:
 
 ```
 gtfcr-init alpha
