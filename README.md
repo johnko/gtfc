@@ -50,7 +50,7 @@ Wait about 60 seconds for the other nodes to pull.
 
 # Can some hosts be read-only?
 
-Kind of. 
+Kind of.
 
 Scenario 1
 ```
@@ -122,3 +122,19 @@ git add .
 git commit -m "add testdate"
 ```
 Wait about 60 seconds for the other nodes to pull.
+
+# Scripting
+
+gitcluster_init() {
+    first=$1
+    repo=$2
+    ssh    urep@$first   gtfc init  $first     $repo
+}
+
+gitcluster_add() {
+    first=$1
+    second=$2
+    repo=$3
+    ssh -A urep@$second  gtfc clone $first     $repo
+    ssh    urep@$first   sh $repo/gitpullall.sh -f
+}
