@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# set the command of a pubkey to gtfc-shell to only allow git push and pull ops
+
+if [ "x" != "x$GITPATH" ]; then
+    [ "x" != "x$DEBUG" ] && echo "${GITPATH}"
+    cd ${GITPATH}
+    git merge -m "merge after a push from ${SSH_CONNECTION}" tomerge >/dev/null 2>&1
+    git branch -d tomerge >/dev/null 2>&1
+    [ -e ${GITPATH}/.authorized_keys2 ] &&
+        install -C -m 600 ${GITPATH}/.authorized_keys2 ${HOME}/.ssh/authorized_keys2
+    [ -e ${GITPATH}/.sshconfig ] &&
+        install -C -m 600 ${GITPATH}/.sshconfig ${HOME}/.ssh/config
+fi

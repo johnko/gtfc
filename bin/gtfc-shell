@@ -14,14 +14,7 @@ if echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-upload-pack ' >/dev/null 2>&1 ; t
 
 elif echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-receive-pack ' >/dev/null 2>&1 ; then
     git-shell -c "${SSH_ORIGINAL_COMMAND}"
-    GITPATH=`echo "${SSH_ORIGINAL_COMMAND}" | sed 's;git-receive-pack ;;' | sed "s;^';;" | sed "s;'$;;"`
-    [ "x" != "x$DEBUG" ] && echo "${GITPATH}"
-    cd ${GITPATH}
-    git merge -m "merge after a push from ${SSH_CONNECTION}" tomerge >/dev/null 2>&1
-    git branch -d tomerge >/dev/null 2>&1
-    [ -e ${GITPATH}/.authorized_keys2 ] &&
-        install -C -m 600 ${GITPATH}/.authorized_keys2 ${HOME}/.ssh/authorized_keys2
-    [ -e ${GITPATH}/.sshconfig ] &&
-        install -C -m 600 ${GITPATH}/.sshconfig ${HOME}/.ssh/config
+    export GITPATH=`echo "${SSH_ORIGINAL_COMMAND}" | sed 's;git-receive-pack ;;' | sed "s;^';;" | sed "s;'$;;"`
+    sh ${HOME}/bin/gtfc-shell.mergepush
 
 fi

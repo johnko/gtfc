@@ -8,9 +8,8 @@ if [ "x" != "x$DEBUG" ]; then
         echo "${SSH_CONNECTION}                 args: $*" >>${HOME}/history-gtfc-remote
     fi
 fi
-
 # only allow git-upload-pack which is when another host pulls
-
 if echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-upload-pack ' >/dev/null 2>&1 ; then
     git-shell -c "${SSH_ORIGINAL_COMMAND}"
+
 fi
