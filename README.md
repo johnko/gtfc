@@ -39,6 +39,7 @@ beta$  gtfc-join alpha ~/myrepo
 
 ```
 alpha$  echo `date` `hostname` > ~/myrepo/test
+alpha$  gtfc-push
 ```
 
 # Can some hosts be read-only?

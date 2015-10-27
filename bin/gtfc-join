@@ -39,4 +39,4 @@ ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat > ${HOME}/.ssh/config
 install -C ${HOME}/.ssh/authorized_keys2  ${FOLDER}/.authorized_keys2
 install -C ${HOME}/.ssh/config  ${FOLDER}/.sshconfig
 
-sh ${HOME}/bin/gtfc-addandpush ${FOLDER}
+sh ${HOME}/bin/gtfc-push ${FOLDER}

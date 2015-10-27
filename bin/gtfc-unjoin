@@ -16,4 +16,4 @@ cat ${FOLDER}/.authorized_keys2 | grep -v "`whoami`@`hostname`$" > ${HOME}/.ssh/
 # copy and push
 install -C ${HOME}/.ssh/authorized_keys2 ${FOLDER}/.authorized_keys2
 
-sh ${HOME}/bin/gtfc-addandpush ${FOLDER}
+sh ${HOME}/bin/gtfc-push ${FOLDER}
