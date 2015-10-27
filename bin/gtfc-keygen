@@ -8,7 +8,7 @@
 
 if [ ! -e ${HOME}/.ssh/gtfc.authorized_keys ]; then
     cat >${HOME}/.ssh/gtfc.authorized_keys <<EOF
-command="gtfc-shell -c \"\$SSH_ORIGINAL_COMMAND\" `cat ${HOME}/.ssh/id_ed25519.pub`
+command="${HOME}/bin/gtfc-shell \$SSH_ORIGINAL_COMMAND" `cat ${HOME}/.ssh/id_ed25519.pub`
 EOF
     vi ${HOME}/.ssh/gtfc.authorized_keys
 fi
