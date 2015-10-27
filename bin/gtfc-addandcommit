@@ -4,11 +4,8 @@
 # should be called from a kqueue watcher or manually
 # $0 /path/to/watch
 
-FOLDER=$1
-if [ "x" = "x$FOLDER" ]; then
-    FOLDER="${HOME}/gitcluster/working"
-    GITPACK=${FOLDER##*/}/.git.gtfc
-fi
+
+. ${HOME}/bin/gtfc-parsefolder $1
 
 [ -d ${FOLDER} ] || exit 1
 
@@ -19,7 +16,6 @@ git commit -a -m "added a file - `whoami`@`hostname`"
 for i in ${NODES} ; then
     . ${HOME}/bin/gtfc-parse ${i}
     install -d -m 700 "/var/tmp/${USER}"
-    SAFEFOLDERNAME=$( echo ${FOLDER} | tr -cd [:alnum:] )
     LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
     # Attempt to lock the lock file if it is set. via https://gist.github.com/liquidgecka/9788122
     if [ -n "$LOCK_FILE" ] ; then
@@ -30,5 +26,5 @@ for i in ${NODES} ; then
             exit 1
         fi
     fi
-    git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${FOLDER} master tomerge &
+    git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master tomerge &
 fi

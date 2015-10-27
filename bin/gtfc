@@ -158,30 +158,5 @@ elif [ "add" = "$1" ]; then # run this on HOSTA before running on clones
   git commit -m "added ${HOST} to config"
   # end of add
 
-######################################################################
-# 3. on hostB as ${MYUSER}, run: gtfc clone HOSTA
-######################################################################
-elif [ "clone" = "$1" ]; then # run on clones
-  ssh -t ${MYUSER}@${HOST} "gtfc add ${MYHOSTNAME}"
-  [ -d ${FOLDER} ] || git clone ssh://${MYUSER}@${HOST}:${PEERPORT}/${FOLDER}
-  [ -d ${FOLDER} ] || exit 1
-  cd ${FOLDER}
-  if [ -e .gtfc/gitpullall.sh.${MYHOSTNAME} ]; then
-       sh .gtfc/gitpullall.sh.${MYHOSTNAME}
-  else
-       sh .gtfc/gitpullall.sh
-  fi
-  if [                            -e .gtfc/authorized_keys2.${MYHOSTNAME} ]; then
-    cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2.${MYHOSTNAME}
-  else
-    cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2
-  fi
-  if [                       -e .gtfc/known_hosts.${MYHOSTNAME} ]; then
-    cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts.${MYHOSTNAME}
-  else
-    cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts
-  fi
-  git add .
-  git commit -m "added `hostname` to authorized_keys2, known_hosts"
 
 fi

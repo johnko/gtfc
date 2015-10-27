@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# gtfc join
+# Usage:
+# ssh -A hostTWO
+# gtfc-join HOSTONE /path/to/repo
+
+. ${HOME}/bin/gtfc-parse $1
+. ${HOME}/bin/gtfc-parsefolder $2
+
+if [ "x" = "x$HOST" ]; then
+    echo "ERROR: missing host1" >&2
+    exit 1
+fi
+
+[ -d ${FOLDER} ] || git clone ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER}
+[ -d ${FOLDER} ] || exit 1
+
+  cd ${FOLDER}
+  if [ -e .gtfc/gitpullall.sh.${MYHOSTNAME} ]; then
+       sh .gtfc/gitpullall.sh.${MYHOSTNAME}
+  else
+       sh .gtfc/gitpullall.sh
+  fi
+  if [                            -e .gtfc/authorized_keys2.${MYHOSTNAME} ]; then
+    cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2.${MYHOSTNAME}
+  else
+    cp ${HOME}/.ssh/authorized_keys2 .gtfc/authorized_keys2
+  fi
+  if [                       -e .gtfc/known_hosts.${MYHOSTNAME} ]; then
+    cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts.${MYHOSTNAME}
+  else
+    cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts
+  fi
+  git add .
+  git commit -m "added `hostname` to authorized_keys2, known_hosts"

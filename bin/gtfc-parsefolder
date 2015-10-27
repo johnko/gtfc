@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# gtfc parsefolder will set variables FOLDER and SAFEFOLDERNAME
+# Usage
+# in a sh file
+# . ~/bin/gtfc-parsefolder /usr/home/asdf
+
+FOLDER=$1
+if [ "x" = "x$FOLDER" ]; then
+    FOLDER="${HOME}/gitcluster/working"
+    GITPACKDIR=${FOLDER##*/}/.git.gtfc
+fi
+REMOTEFOLDER=$(echo ${FOLDER} | sed 's;^/;;')
+SAFEFOLDERNAME=$( echo ${FOLDER} | tr -cd [:alnum:] )
+
+export FOLDER
+export GITPACKDIR
+export REMOTEFOLDER
+export SAFEFOLDERNAME
