@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Usage:
+# gtfc-wipe
+
+rm ${HOME}/.ssh/authorized_keys2
+rm ${HOME}/.ssh/config
+rm ${HOME}/.ssh/gtfc.*
+rm ${HOME}/.ssh/id_ed25519*
+rm -rf ${HOME}/gitcluster/
