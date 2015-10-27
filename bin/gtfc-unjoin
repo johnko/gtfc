@@ -10,8 +10,10 @@ export FOLDER=$1
 
 cd ${FOLDER}
 
+# remove myself
 cat ${FOLDER}/.authorized_keys2 | grep -v "`whoami`@`hostname`$" > ${HOME}/.ssh/authorized_keys2
 
-install -C -m 600 ${HOME}/.ssh/authorized_keys2 ${FOLDER}/.authorized_keys2
+# copy and push
+install -C ${HOME}/.ssh/authorized_keys2 ${FOLDER}/.authorized_keys2
 
 sh ${HOME}/bin/gtfc-addandpush ${FOLDER}

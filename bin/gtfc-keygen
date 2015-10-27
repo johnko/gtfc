@@ -11,3 +11,12 @@ if [ ! -e ${HOME}/.ssh/authorized_keys.mypubkey ]; then
 command="gtfc-shell -c \"\$SSH_ORIGINAL_COMMAND\" `cat ${HOME}/.ssh/id_ed25519.pub`
 EOF
 fi
+
+if [ ! -e ${HOME}/.ssh/config.mypubkey ]; then
+    cat >${HOME}/.ssh/config.mypubkey <<EOF
+Host `hostname`
+    HostName `net-ip`
+    Port 22
+    User `whoami`
+EOF
+fi

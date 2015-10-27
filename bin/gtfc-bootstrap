@@ -14,10 +14,13 @@ git config user.name "`whoami`" >/dev/null 2>&1
 
 cd ${FOLDER}
 
-cat ${HOME}/.ssh/authorized_keys.mypubkey > ${FOLDER}/.authorized_keys2
-git add --all .
-git commit -a -m "initial commit - `whoami`@`hostname`" >/dev/null 2>&1
 
 # add my pubkey to existing cluster (i am the first node)
-cat ${HOME}/.ssh/authorized_keys.mypubkey \
-| cat >>${HOME}/.ssh/authorized_keys2
+install -C ${HOME}/.ssh/authorized_keys.mypubkey  ${FOLDER}/.authorized_keys2
+install -C ${HOME}/.ssh/authorized_keys.mypubkey  ${HOME}/.ssh/authorized_keys2
+# add my config to existing cluster (i am the first node)
+install -C ${HOME}/.ssh/config.mypubkey  ${FOLDER}/.sshconfig
+install -C ${HOME}/.ssh/config.mypubkey  ${HOME}/.ssh/config
+
+git add --all .
+git commit -a -m "initial commit - `whoami`@`hostname`" >/dev/null 2>&1
