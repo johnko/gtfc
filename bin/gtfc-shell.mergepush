@@ -7,8 +7,12 @@ if [ "x" != "x$GITPATH" ]; then
     cd ${GITPATH}
     git merge -m "merge after a push from ${SSH_CONNECTION}" tomerge >/dev/null 2>&1
     git branch -d tomerge >/dev/null 2>&1
-    [ -e ${GITPATH}/.authorized_keys2 ] &&
-        install -C -m 600 ${GITPATH}/.authorized_keys2 ${HOME}/.ssh/authorized_keys2
-    [ -e ${GITPATH}/.sshconfig ] &&
-        install -C -m 600 ${GITPATH}/.sshconfig ${HOME}/.ssh/config
+    ###########################
+    # isntall different cluster files
+    for file in authorized_keys2 config known_hosts ; do
+        [ -e ${GITPATH}/.gitcluster/${file} ] &&
+            install -C -m 600 ${GITPATH}/.gitcluster/${file} ${HOME}/.ssh/${file}
+    done
+    ###########################
+
 fi

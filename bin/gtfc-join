@@ -22,21 +22,17 @@ ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat > ${HOME}/.ssh/config
 # This clone will only work with -A and add the HOST to known_hosts
 [ -d ${FOLDER} ] || git clone --depth=1 --separate-git-dir=${GITPACKDIR} ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER} ${FOLDER} >/dev/null 2>&1
 [ -d ${FOLDER} ] || exit 1
-
+###########################
 # add my pubkey to existing cluster but not to repo
-cat ${HOME}/.ssh/gtfc.authorized_keys2 \
-| ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/authorized_keys2"
-# get cluster's authorized_keys2
-ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/authorized_keys2" | cat > ${HOME}/.ssh/authorized_keys2
+for file in authorized_keys2 config known_hosts ; do
+    cat ${HOME}/.ssh/gtfc.${file} \
+    | ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/${file}"
+    # get cluster's version
+    ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/${file}" | cat > ${HOME}/.ssh/${file}
+    # now copy to repo
+    install -C ${HOME}/.ssh/${file}  ${FOLDER}/.gitcluster/${file}
+done
+###########################
 
-# add my config to existing cluster but not to repo
-cat ${HOME}/.ssh/gtfc.config \
-| ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/config"
-# get cluster's config
-ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat > ${HOME}/.ssh/config
-
-# now copy to repo and push
-install -C ${HOME}/.ssh/authorized_keys2  ${FOLDER}/.authorized_keys2
-install -C ${HOME}/.ssh/config  ${FOLDER}/.sshconfig
-
+#  and push
 sh ${HOME}/bin/gtfc-push ${FOLDER}

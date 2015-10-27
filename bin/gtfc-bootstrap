@@ -14,13 +14,13 @@ git config user.name "`whoami`" >/dev/null 2>&1
 
 cd ${FOLDER}
 
-
-# add my pubkey to existing cluster (i am the first node)
-install -C ${HOME}/.ssh/gtfc.authorized_keys2  ${FOLDER}/.authorized_keys2
-install -C ${HOME}/.ssh/gtfc.authorized_keys2  ${HOME}/.ssh/authorized_keys2
-# add my config to existing cluster (i am the first node)
-install -C ${HOME}/.ssh/gtfc.config  ${FOLDER}/.sshconfig
-install -C ${HOME}/.ssh/gtfc.config  ${HOME}/.ssh/config
+###########################
+# add my pubkey to existing cluster but not to repo
+for file in authorized_keys2 config known_hosts ; do
+    install -C ${HOME}/.ssh/gtfc.${file}  ${FOLDER}/.gitcluster/${file}
+    install -C ${HOME}/.ssh/gtfc.${file}  ${HOME}/.ssh/${file}
+done
+###########################
 
 git add --all .
 git commit -a -m "initial commit - `whoami`@`hostname`" >/dev/null 2>&1
