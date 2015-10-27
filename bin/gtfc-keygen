@@ -6,14 +6,14 @@
 [ -f ${HOME}/.ssh/id_ed25519 ] \
     || ssh-keygen -N '' -t ed25519 -f ${HOME}/.ssh/id_ed25519
 
-if [ ! -e ${HOME}/.ssh/authorized_keys.mypubkey ]; then
-    cat >${HOME}/.ssh/authorized_keys.mypubkey <<EOF
+if [ ! -e ${HOME}/.ssh/gtfc.authorized_keys ]; then
+    cat >${HOME}/.ssh/gtfc.authorized_keys <<EOF
 command="gtfc-shell -c \"\$SSH_ORIGINAL_COMMAND\" `cat ${HOME}/.ssh/id_ed25519.pub`
 EOF
 fi
 
-if [ ! -e ${HOME}/.ssh/config.mypubkey ]; then
-    cat >${HOME}/.ssh/config.mypubkey <<EOF
+if [ ! -e ${HOME}/.ssh/gtfc.config ]; then
+    cat >${HOME}/.ssh/gtfc.config <<EOF
 Host `hostname`
     HostName `net-ip`
     Port 22
