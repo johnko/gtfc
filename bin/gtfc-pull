@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# should be called from a kqueue watcher or manually
-# $0 /path/to/watch
+# for maybe when a node is rebooted and needs to catch up
 
 export FOLDER=$1
 . ${HOME}/bin/gtfc-parsefolder
