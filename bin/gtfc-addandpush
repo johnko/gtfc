@@ -9,9 +9,10 @@
 
 cd ${FOLDER}
 
+git add --all .
 git commit -a -m "added a file - `whoami`@`hostname`"
 
-for i in ${NODES} ; then
+for i in ${NODES} ; do
     . ${HOME}/bin/gtfc-parse ${i}
     install -d -m 700 "/var/tmp/${USER}"
     LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
@@ -25,4 +26,4 @@ for i in ${NODES} ; then
         fi
     fi
     git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master tomerge &
-fi
+done

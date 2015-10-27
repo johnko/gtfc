@@ -5,8 +5,8 @@
 . ${HOME}/bin/gtfc-keygen
 . ${HOME}/bin/gtfc-parsefolder $1
 
-git config user.email "`whoami`@`hostname -s`.gtfc.local"
-git config user.name "`whoami`"
+git config user.email "`whoami`@`hostname -s`.gtfc.local" >/dev/null 2>&1
+git config user.name "`whoami`" >/dev/null 2>&1
 
 [ -d ${FOLDER} ] || git init --separate-git-dir=${GITPACKDIR} ${FOLDER}
 [ -d ${FOLDER} ] || exit 1
