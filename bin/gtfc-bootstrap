@@ -12,5 +12,5 @@ git config user.name "`whoami`"
 [ -d ${FOLDER} ] || exit 1
 
 # add my pubkey to existing cluster (i am the first node)
-cat >${HOME}/.ssh/authorized_keys.mypubkey \
+cat ${HOME}/.ssh/authorized_keys.mypubkey \
 | cat >>${HOME}/.ssh/authorized_keys2

@@ -18,7 +18,7 @@ fi
 [ -d ${FOLDER} ] || exit 1
 
 # add my pubkey to existing cluster
-cat >${HOME}/.ssh/authorized_keys.mypubkey \
+cat ${HOME}/.ssh/authorized_keys.mypubkey \
 | ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/authorized_keys2"
 
 # get cluster's authorized_keys2
