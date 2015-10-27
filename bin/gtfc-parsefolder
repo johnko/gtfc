@@ -11,7 +11,7 @@ if [ "x" = "x$FOLDER" ]; then
     FOLDER="${HOME}/gitcluster/working"
     GITPACKDIR=${FOLDER%/*}/.git.${FOLDER##*/}
 fi
-REMOTEFOLDER=$(echo ${FOLDER} | sed 's;^/;;')
+REMOTEFOLDER=$( echo ${FOLDER} | sed 's;^/;;')
 SAFEFOLDERNAME=$( echo ${FOLDER} | tr -cd [:alnum:] )
 
 export FOLDER
