@@ -20,9 +20,8 @@ fi
 for i in ${NODES} ; do
     export TOSPLIT=$i
     . ${HOME}/bin/gtfc-parse
-    install -d -m 700 "/var/tmp/${USER}"
     if [ "x" != "x${HOST}" ]; then
-        install -d -m 700 "/tmp/${MYUSER}"
+        install -d -m 700 "/tmp/${USER}"
         LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
         # Attempt to lock the lock file if it is set. via https://gist.github.com/liquidgecka/9788122
         if [ -n "$LOCK_FILE" ] ; then
