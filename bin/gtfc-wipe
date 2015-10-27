@@ -5,4 +5,5 @@
 
 rm ${HOME}/.ssh/authorized_keys2
 rm ${HOME}/.ssh/gtfc*
+rm ${HOME}/.ssh/tmp_*
 rm -rf ${HOME}/gitcluster/
