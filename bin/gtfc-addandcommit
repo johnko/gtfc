@@ -2,30 +2,33 @@
 
 # gtfc-addandcommit
 # should be called from a kqueue watcher or manually
+# $0 /path/to/watch
 
 FOLDER=$1
 if [ "x" = "x$FOLDER" ]; then
-  FOLDER="${HOME}/gitsync"
+    FOLDER="${HOME}/gitcluster/working"
+    GITPACK=${FOLDER##*/}/.git.gtfc
 fi
 
 [ -d ${FOLDER} ] || exit 1
+
 cd ${FOLDER}
 
 git commit -a -m "added a file - `whoami`@`hostname`"
 
-git push ssh://${MYUSER}@${HOST}:${PEERPORT}/tomerge master
-
-ssh ${MYUSER}@${HOST} 'git init --bare ${FOLDER}push'
-  while diff .git/config .gtfc/config ; do
-    sleep 1
-  done
-  cp .git/config .gtfc/config
-  cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts
-  git add .
-  git commit -m "added push${HOST} to config, ${HOST} to known_hosts"
-  git push push${HOST} master
-  ssh ${MYUSER}@${HOST} 'git clone ${FOLDER}push ${FOLDER}'
-  ssh ${MYUSER}@${HOST} 'sh ${FOLDER}/.gtfc/gitpullbare.sh'
-  # end of push
-
+for i in ${NODES} ; then
+    . ${HOME}/bin/gtfc-parse ${i}
+    install -d -m 700 "/var/tmp/${USER}"
+    SAFEFOLDERNAME=$( echo ${FOLDER} | tr -cd [:alnum:] )
+    LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
+    # Attempt to lock the lock file if it is set. via https://gist.github.com/liquidgecka/9788122
+    if [ -n "$LOCK_FILE" ] ; then
+        exec 200>> "$LOCK_FILE"
+        flock -w 0 -x 200
+        if [ $? -ne 0 ] ; then
+            echo "Unable to obtain a lock, is a job already running?"
+            exit 1
+        fi
+    fi
+    git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${FOLDER} master tomerge &
 fi
