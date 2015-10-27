@@ -30,7 +30,7 @@ for file in authorized_keys2 config known_hosts ; do
     # get cluster's version
     ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/${file}" | cat > ${HOME}/.ssh/${file}
     # now copy to repo
-    install -C ${HOME}/.ssh/${file}  ${FOLDER}/.gitcluster/${file}
+    install -C ${HOME}/.ssh/${file}  ${FOLDER}/.gitcluster.ssh/${file}
 done
 ###########################
 

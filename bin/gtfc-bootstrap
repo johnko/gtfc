@@ -14,10 +14,12 @@ git config user.name "`whoami`" >/dev/null 2>&1
 
 cd ${FOLDER}
 
+install -d 755 ${FOLDER}/.gitcluster.ssh
+
 ###########################
 # add my pubkey to existing cluster but not to repo
 for file in authorized_keys2 config known_hosts ; do
-    install -C ${HOME}/.ssh/gtfc.${file}  ${FOLDER}/.gitcluster/${file}
+    install -C ${HOME}/.ssh/gtfc.${file}  ${FOLDER}/.gitcluster.ssh/${file}
     install -C ${HOME}/.ssh/gtfc.${file}  ${HOME}/.ssh/${file}
 done
 ###########################
