@@ -35,6 +35,13 @@ local$  ssh -A beta
 beta$  gtfc-join alpha ~/myrepo
 ```
 
+## 3. On either, edit a file and push manually
+
+```
+alpha$  echo `date` `hostname` > ~/myrepo/test
+
+```
+
 # Can some hosts be read-only?
 
 Yes.

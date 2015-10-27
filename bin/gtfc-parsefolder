@@ -9,7 +9,7 @@
 FOLDER=$1
 if [ "x" = "x$FOLDER" ]; then
     FOLDER="${HOME}/gitcluster/working"
-    GITPACKDIR=${FOLDER##*/}/.git.gtfc
+    GITPACKDIR=${FOLDER%/*}/.git.${FOLDER##*/}
 fi
 REMOTEFOLDER=$(echo ${FOLDER} | sed 's;^/;;')
 SAFEFOLDERNAME=$( echo ${FOLDER} | tr -cd [:alnum:] )

@@ -14,7 +14,7 @@ if [ "x" = "x$HOST" ]; then
 fi
 
 # This clone will only work with -A and add the HOST to known_hosts
-[ -d ${FOLDER} ] || git clone ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER}
+[ -d ${FOLDER} ] || git clone --separate-git-dir=${GITPACKDIR} ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER}
 [ -d ${FOLDER} ] || exit 1
 
 # add my pubkey to existing cluster

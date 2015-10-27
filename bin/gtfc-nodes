@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Usage:
+# gtfc-nodes
+
+cat ${HOME}/.ssh/authorized_keys2 | awk '{print $NF}'
