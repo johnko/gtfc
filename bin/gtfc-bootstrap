@@ -22,6 +22,9 @@ for file in authorized_keys2 ; do
     install -C ${HOME}/.ssh/gtfc_${file}  ${FOLDER}/.gitcluster.ssh/${file}
     install -C ${HOME}/.ssh/gtfc_${file}  ${HOME}/.ssh/${file}
 done
+
+ssh -F ${HOME}/.ssh/gtfc_config -o UserKnownHostsFile=${HOME}/.ssh/gtfc_known_hosts -i ${HOME}/.ssh/gtfc_id `net-ip` date
+
 # append my version to local repo
 for file in config known_hosts ; do
     install -C ${HOME}/.ssh/gtfc_${file}  ${FOLDER}/.gitcluster.ssh/${file}
