@@ -3,7 +3,8 @@
 # should be called from a kqueue watcher or manually
 # $0 /path/to/watch
 
-. ${HOME}/bin/gtfc-parsefolder $1
+export FOLDER=$1
+. ${HOME}/bin/gtfc-parsefolder
 
 [ -d ${FOLDER} ] || exit 1
 
@@ -13,17 +14,20 @@ git add --all .
 git commit -a -m "added a file - `whoami`@`hostname`"
 
 for i in ${NODES} ; do
-    . ${HOME}/bin/gtfc-parse ${i}
+    export TOSPLIT=$i
+    . ${HOME}/bin/gtfc-parse
     install -d -m 700 "/var/tmp/${USER}"
-    LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
-    # Attempt to lock the lock file if it is set. via https://gist.github.com/liquidgecka/9788122
-    if [ -n "$LOCK_FILE" ] ; then
-        exec 200>> "$LOCK_FILE"
-        flock -w 0 -x 200
-        if [ $? -ne 0 ] ; then
-            echo "Unable to obtain a lock, is a job already running?"
-            exit 1
+    if [ "x" != "x${HOST}" ]; then
+        LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
+        # Attempt to lock the lock file if it is set. via https://gist.github.com/liquidgecka/9788122
+        if [ -n "$LOCK_FILE" ] ; then
+            exec 200>> "$LOCK_FILE"
+            flock -w 0 -x 200
+            if [ $? -ne 0 ] ; then
+                echo "Unable to obtain a lock, is a job already running?"
+                exit 1
+            fi
         fi
+        git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master tomerge &
     fi
-    git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master tomerge &
 done

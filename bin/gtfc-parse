@@ -8,7 +8,6 @@
 
 MYUSER="`whoami`"
 PORT="22"
-TOSPLIT=$1
 if grep '@' ${TOSPLIT} >/dev/null 2>&1 ; then
     if [ "x" != "x${TOSPLIT%@*}" ]; then
         MYUSER="${TOSPLIT%@*}"

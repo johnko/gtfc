@@ -6,7 +6,6 @@
 # in a sh file
 # . ~/bin/gtfc-parsefolder /usr/home/asdf
 
-FOLDER=$1
 if [ "x" = "x$FOLDER" ]; then
     FOLDER="${HOME}/gitcluster/working"
 fi

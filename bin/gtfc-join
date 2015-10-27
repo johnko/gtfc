@@ -5,11 +5,13 @@
 # gtfc-addto existingcluster /path/to/repo
 
 . ${HOME}/bin/gtfc-keygen
-. ${HOME}/bin/gtfc-parse $1
-. ${HOME}/bin/gtfc-parsefolder $2
+export TOSPLIT=$1
+. ${HOME}/bin/gtfc-parse
+export FOLDER=$2
+. ${HOME}/bin/gtfc-parsefolder
 
 if [ "x" = "x$HOST" ]; then
-    echo "ERROR: missing host1" >&2
+    echo "ERROR: missing host" >&2
     exit 1
 fi
 
