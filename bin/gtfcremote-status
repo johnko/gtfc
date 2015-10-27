@@ -2,12 +2,10 @@
 
 # Compares the last git log of gitsync in HOSTS
 
-HOSTS="ace bar mana storm"
-
 for i in ${HOSTS} ; do
-  printf '%s ' $i
-  for k in `seq ${#i} 10` ; do
-    printf ' ';
-  done
-  ssh urep@$i 'cd gitsync && git log --oneline --decorate -1 | sed "s/master//g;s:/,::g"'
+    printf '%s ' $i
+    for k in `seq ${#i} 10` ; do
+        printf ' ';
+    done
+    ssh urep@$i 'cd gitcluster && git log --oneline --decorate -1 | sed "s/master//g;s:/,::g"'
 done
