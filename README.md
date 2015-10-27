@@ -26,7 +26,6 @@ Limitations                                | Bad for large files or binary. Sync
 ```
 local$  ssh alpha
 alpha$  gtfc-bootstrap ~/myrepo
-alpha$  echo `date` `hostname` > ~/myrepo/test
 ```
 
 ## 2. SSH into beta with forwarding of the authentication agent connection
@@ -39,8 +38,7 @@ beta$  gtfc-join alpha ~/myrepo
 ## 3. On either, edit a file and push manually
 
 ```
-
-
+alpha$  echo `date` `hostname` > ~/myrepo/test
 ```
 
 # Can some hosts be read-only?
