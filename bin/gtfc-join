@@ -15,6 +15,10 @@ if [ "x" = "x$HOST" ]; then
     exit 1
 fi
 
+# get the config
+ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | sort -u | cat >>${HOME}/.ssh/config
+
+
 # This clone will only work with -A and add the HOST to known_hosts
 [ -d ${FOLDER} ] || git clone --depth=1 --separate-git-dir=${GITPACKDIR} ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER} ${FOLDER}
 [ -d ${FOLDER} ] || exit 1
