@@ -30,9 +30,9 @@ export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/tmp_config -o UserKnownHostsFile=${H
 # add my pubkey to remote cluster and local repo
 for file in authorized_keys2 ; do
     cat ${HOME}/.ssh/gtfc_${file} \
-    | ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/${file}"
+    | ssh -o UserKnownHostsFile=${FOLDER}/.gitcluster.ssh/known_hosts -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/${file}"
     # get cluster's version
-    ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/${file}" | cat > ${HOME}/.ssh/${file}
+    ssh -o UserKnownHostsFile=${FOLDER}/.gitcluster.ssh/known_hosts -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/${file}" | cat > ${HOME}/.ssh/${file}
     # now copy to repo
     install -C ${HOME}/.ssh/${file}  ${FOLDER}/.gitcluster.ssh/${file}
 done
