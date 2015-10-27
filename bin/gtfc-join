@@ -20,7 +20,7 @@ ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | sort -u | cat >>${HOME}/.
 
 
 # This clone will only work with -A and add the HOST to known_hosts
-[ -d ${FOLDER} ] || git clone --depth=1 --separate-git-dir=${GITPACKDIR} ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER} ${FOLDER}
+[ -d ${FOLDER} ] || git clone --depth=1 --separate-git-dir=${GITPACKDIR} ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER} ${FOLDER} >/dev/null 2>&1
 [ -d ${FOLDER} ] || exit 1
 
 # add my pubkey to existing cluster but not to repo
