@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# should be called from a kqueue watcher or manually
+# $0 /path/to/watch
+
+export FOLDER=$1
+. ${HOME}/bin/gtfc-parsefolder
+
+[ -d ${FOLDER} ] || exit 1
+
+cd ${FOLDER}
+
+if [ "x" = "x$NODES" ]; then
+    NODES=$( gtfc-nodes )
+fi
+
+for i in ${NODES} ; do
+    export TOSPLIT=$i
+    . ${HOME}/bin/gtfc-parse
+    if [ "x" != "x${HOST}" ]; then
+        install -d -m 700 "/tmp/${USER}"
+        LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
+        lockf $LOCK_FILE git pull ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master
+    fi
+done
