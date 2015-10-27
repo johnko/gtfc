@@ -17,12 +17,13 @@ fi
 
 # get the config
 ssh -p ${PORT} ${MYUSER}@${HOST} "cat ${FOLDER}/.gitcluster.ssh/config" | cat > ${HOME}/.ssh/tmp_config
+ssh -p ${PORT} ${MYUSER}@${HOST} "cat ${FOLDER}/.gitcluster.ssh/known_hosts" | cat > ${HOME}/.ssh/tmp_known_hosts
 
 export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/tmp_config -o UserKnownHostsFile=${HOME}/.ssh/tmp_known_hosts -i ${HOME}/.ssh/gtfc_id"
 
 
 # This clone will only work with -A and add the HOST to known_hosts
-[ -d ${FOLDER} ] || git clone --depth=1 --separate-git-dir=${GITPACKDIR} ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER} ${FOLDER} >/dev/null 2>&1
+[ -d ${FOLDER} ] || git clone --depth=20 --separate-git-dir=${GITPACKDIR} ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER} ${FOLDER} >/dev/null 2>&1
 [ -d ${FOLDER} ] || exit 1
 ###########################
 . ${HOME}/bin/gtfc-ssh-command
@@ -36,12 +37,7 @@ for file in authorized_keys2 ; do
     install -C ${HOME}/.ssh/${file}  ${FOLDER}/.gitcluster.ssh/${file}
 done
 
-ssh -F ${HOME}/.ssh/gtfc_config -o UserKnownHostsFile=${HOME}/.ssh/gtfc_known_hosts -i ${HOME}/.ssh/gtfc_id `net-ip` date
-
-# append my version to local repo
-for file in config known_hosts ; do
-    cat ${HOME}/.ssh/gtfc_${file} >> ${FOLDER}/.gitcluster.ssh/${file}
-done
+sh ${HOME}/bin/gtfc-appendconfigtocluster
 ###########################
 
 #  and push
