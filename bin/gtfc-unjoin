@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# On the node you want to remove
+
+. ${HOME}/bin/gtfc-keygen
+export FOLDER=$1
+. ${HOME}/bin/gtfc-parsefolder
+
+[ -d ${FOLDER} ] || exit 1
+
+cd ${FOLDER}
+
+cat ${FOLDER}/.authorized_keys2 | grep -v "`whoami`@`hostname`$" > ${HOME}/.ssh/authorized_keys2
+
+install -C -m 600 ${HOME}/.ssh/authorized_keys2 ${FOLDER}/.authorized_keys2
+
+sh ${HOME}/bin/gtfc-addandpush ${FOLDER}

@@ -3,4 +3,4 @@
 # Usage:
 # gtfc-nodes
 
-cat ${HOME}/.ssh/authorized_keys2 | awk '{print $NF}'
+cat ${HOME}/.ssh/authorized_keys2 | grep -v "`whoami`@`hostname`$" | awk '{print $NF}'

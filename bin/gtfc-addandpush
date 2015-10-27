@@ -11,7 +11,7 @@ export FOLDER=$1
 cd ${FOLDER}
 
 git add --all .
-git commit -a -m "added a file - `whoami`@`hostname`"
+git commit -a -m "modified - `whoami`@`hostname`"
 
 for i in ${NODES} ; do
     export TOSPLIT=$i
