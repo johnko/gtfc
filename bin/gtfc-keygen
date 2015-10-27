@@ -3,24 +3,24 @@
 # Usage:
 # gtfc-keygen
 
-[ -f ${HOME}/.ssh/id_ed25519 ] \
-    || ssh-keygen -N '' -t ed25519 -f ${HOME}/.ssh/id_ed25519
+[ -f ${HOME}/.ssh/gtfc_id ] \
+    || ssh-keygen -N '' -t ed25519 -f ${HOME}/.ssh/gtfc_id
 
-if [ ! -e ${HOME}/.ssh/gtfc.authorized_keys2 ]; then
-    cat >${HOME}/.ssh/gtfc.authorized_keys2 <<EOF
-command="${HOME}/bin/gtfc-shell" `cat ${HOME}/.ssh/id_ed25519.pub`
+if [ ! -e ${HOME}/.ssh/gtfc_authorized_keys2 ]; then
+    cat >${HOME}/.ssh/gtfc_authorized_keys2 <<EOF
+command="${HOME}/bin/gtfc-shell" `cat ${HOME}/.ssh/gtfc_id.pub`
 EOF
-    vi ${HOME}/.ssh/gtfc.authorized_keys2
+    vi ${HOME}/.ssh/gtfc_authorized_keys2
 fi
 
-if [ ! -e ${HOME}/.ssh/gtfc.config ]; then
-    cat >${HOME}/.ssh/gtfc.config <<EOF
+if [ ! -e ${HOME}/.ssh/gtfc_config ]; then
+    cat >${HOME}/.ssh/gtfc_config <<EOF
 Host `hostname`
     HostName `net-ip`
     Port 22
     User `whoami`
 EOF
-    vi ${HOME}/.ssh/gtfc.config
+    vi ${HOME}/.ssh/gtfc_config
 fi
 
 sh ${HOME}/bin/gtfc-allowauthkey1

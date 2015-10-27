@@ -16,21 +16,28 @@ if [ "x" = "x$HOST" ]; then
 fi
 
 # get the config
-ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat > ${HOME}/.ssh/config
+ssh -p ${PORT} ${MYUSER}@${HOST} "cat ${FOLDER}/.gitcluster.ssh/config" | cat > ${HOME}/.ssh/tmp_config
+
+export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/tmp_config -o UserKnownHostsFile=${HOME}/.ssh/tmp_known_hosts -i ${HOME}/.ssh/gtfc_id"
 
 
 # This clone will only work with -A and add the HOST to known_hosts
 [ -d ${FOLDER} ] || git clone --depth=1 --separate-git-dir=${GITPACKDIR} ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER} ${FOLDER} >/dev/null 2>&1
 [ -d ${FOLDER} ] || exit 1
 ###########################
-# add my pubkey to existing cluster but not to repo
-for file in authorized_keys2 config known_hosts ; do
-    cat ${HOME}/.ssh/gtfc.${file} \
+. ${HOME}/bin/gtfc-ssh-command
+# add my pubkey to remote cluster and local repo
+for file in authorized_keys2 ; do
+    cat ${HOME}/.ssh/gtfc_${file} \
     | ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/${file}"
     # get cluster's version
     ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/${file}" | cat > ${HOME}/.ssh/${file}
     # now copy to repo
     install -C ${HOME}/.ssh/${file}  ${FOLDER}/.gitcluster.ssh/${file}
+done
+# append my version to local repo
+for file in config known_hosts ; do
+    cat ${HOME}/.ssh/gtfc_${file} >> ${FOLDER}/.gitcluster.ssh/${file}
 done
 ###########################
 

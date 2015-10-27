@@ -12,7 +12,7 @@ cd ${FOLDER}
 if [ "x" = "x$NODES" ]; then
     NODES=$( gtfc-nodes )
 fi
-
+. ${HOME}/bin/gtfc-ssh-command
 for i in ${NODES} ; do
     export TOSPLIT=$i
     . ${HOME}/bin/gtfc-parse
