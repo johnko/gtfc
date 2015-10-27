@@ -16,7 +16,7 @@ if [ "x" = "x$HOST" ]; then
 fi
 
 # get the config
-ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat >>${HOME}/.ssh/config
+ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat > ${HOME}/.ssh/config
 
 
 # This clone will only work with -A and add the HOST to known_hosts
@@ -27,13 +27,13 @@ ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat >>${HOME}/.ssh/config
 cat ${HOME}/.ssh/gtfc.authorized_keys \
 | ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/authorized_keys2"
 # get cluster's authorized_keys2
-ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/authorized_keys2" | cat >>${HOME}/.ssh/authorized_keys2
+ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/authorized_keys2" | cat > ${HOME}/.ssh/authorized_keys2
 
 # add my config to existing cluster but not to repo
 cat ${HOME}/.ssh/gtfc.config \
 | ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/config"
 # get cluster's config
-ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat >>${HOME}/.ssh/config
+ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat > ${HOME}/.ssh/config
 
 # now copy to repo and push
 install -C ${HOME}/.ssh/authorized_keys2  ${FOLDER}/.authorized_keys2
