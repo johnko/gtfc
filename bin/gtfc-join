@@ -24,7 +24,7 @@ ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/config" | cat > ${HOME}/.ssh/config
 [ -d ${FOLDER} ] || exit 1
 
 # add my pubkey to existing cluster but not to repo
-cat ${HOME}/.ssh/gtfc.authorized_keys \
+cat ${HOME}/.ssh/gtfc.authorized_keys2 \
 | ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/authorized_keys2"
 # get cluster's authorized_keys2
 ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/authorized_keys2" | cat > ${HOME}/.ssh/authorized_keys2

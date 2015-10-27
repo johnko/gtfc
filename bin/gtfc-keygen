@@ -6,11 +6,11 @@
 [ -f ${HOME}/.ssh/id_ed25519 ] \
     || ssh-keygen -N '' -t ed25519 -f ${HOME}/.ssh/id_ed25519
 
-if [ ! -e ${HOME}/.ssh/gtfc.authorized_keys ]; then
-    cat >${HOME}/.ssh/gtfc.authorized_keys <<EOF
-command="${HOME}/bin/gtfc-shell \$SSH_ORIGINAL_COMMAND" `cat ${HOME}/.ssh/id_ed25519.pub`
+if [ ! -e ${HOME}/.ssh/gtfc.authorized_keys2 ]; then
+    cat >${HOME}/.ssh/gtfc.authorized_keys2 <<EOF
+command="${HOME}/bin/gtfc-shell" `cat ${HOME}/.ssh/id_ed25519.pub`
 EOF
-    vi ${HOME}/.ssh/gtfc.authorized_keys
+    vi ${HOME}/.ssh/gtfc.authorized_keys2
 fi
 
 if [ ! -e ${HOME}/.ssh/gtfc.config ]; then
@@ -22,3 +22,5 @@ Host `hostname`
 EOF
     vi ${HOME}/.ssh/gtfc.config
 fi
+
+gtfc-allowauthkey1

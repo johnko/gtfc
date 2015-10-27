@@ -24,4 +24,6 @@ elif echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-receive-pack ' >/dev/null 2>&1 
     [ -e ${GITPATH}/.sshconfig ] &&
         install -C -m 600 ${GITPATH}/.sshconfig ${HOME}/.ssh/config
 
+else
+    sh -c "${SSH_ORIGINAL_COMMAND}"
 fi

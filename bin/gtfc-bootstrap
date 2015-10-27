@@ -16,8 +16,8 @@ cd ${FOLDER}
 
 
 # add my pubkey to existing cluster (i am the first node)
-install -C ${HOME}/.ssh/gtfc.authorized_keys  ${FOLDER}/.authorized_keys2
-install -C ${HOME}/.ssh/gtfc.authorized_keys  ${HOME}/.ssh/authorized_keys2
+install -C ${HOME}/.ssh/gtfc.authorized_keys2  ${FOLDER}/.authorized_keys2
+install -C ${HOME}/.ssh/gtfc.authorized_keys2  ${HOME}/.ssh/authorized_keys2
 # add my config to existing cluster (i am the first node)
 install -C ${HOME}/.ssh/gtfc.config  ${FOLDER}/.sshconfig
 install -C ${HOME}/.ssh/gtfc.config  ${HOME}/.ssh/config
