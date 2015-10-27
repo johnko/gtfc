@@ -2,21 +2,26 @@
 
 # set the command of a pubkey to gtfc-shell to only allow git push and pull ops
 
-if echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-upload-pack ' >/dev/null 2>&1 ; then
-    git-shell -c "${SSH_ORIGINAL_COMMAND}"
-elif echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-receive-pack ' >/dev/null 2>&1 ; then
-    git-shell -c "${SSH_ORIGINAL_COMMAND}"
-    GITPATH=`echo "${SSH_ORIGINAL_COMMAND}" | sed 's;git-receive-pack ;;' | sed "s;^';;" | sed "s;'$;;"`
-    cd ${GITPATH}
-    git merge -m "merge after a push from ${SSH_CONNECTION}" tomerge >/dev/null 2>&1 \
-        && git branch -d tomerge >/dev/null 2>&1
-#    [ -e ${GITPATH}/.authorized_keys2 ] &&
-#        install -C -m 600 ${GITPATH}/.authorized_keys2 ${HOME}/.ssh/authorized_keys2
-#    [ -e ${GITPATH}/.sshconfig ] &&
-#        install -C -m 600 ${GITPATH}/.sshconfig ${HOME}/.ssh/config
-else
+if [ "x" != "x$DEBUG" ]; then
     echo "${SSH_CONNECTION} SSH_ORIGINAL_COMMAND: ${SSH_ORIGINAL_COMMAND}" >>${HOME}/history-gtfc-remote
     if [ "x" != "x$*" ]; then
         echo "${SSH_CONNECTION}                 args: $*" >>${HOME}/history-gtfc-remote
     fi
+fi
+
+if echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-upload-pack ' >/dev/null 2>&1 ; then
+    git-shell -c "${SSH_ORIGINAL_COMMAND}"
+
+elif echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-receive-pack ' >/dev/null 2>&1 ; then
+    git-shell -c "${SSH_ORIGINAL_COMMAND}"
+    GITPATH=`echo "${SSH_ORIGINAL_COMMAND}" | sed 's;git-receive-pack ;;' | sed "s;^';;" | sed "s;'$;;"`
+    [ "x" != "x$DEBUG" ] && echo "${GITPATH}"
+    cd ${GITPATH}
+    git merge -m "merge after a push from ${SSH_CONNECTION}" tomerge \
+        && git branch -d tomerge
+#    [ -e ${GITPATH}/.authorized_keys2 ] &&
+#        install -C -m 600 ${GITPATH}/.authorized_keys2 ${HOME}/.ssh/authorized_keys2
+#    [ -e ${GITPATH}/.sshconfig ] &&
+#        install -C -m 600 ${GITPATH}/.sshconfig ${HOME}/.ssh/config
+
 fi
