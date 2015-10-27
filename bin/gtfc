@@ -9,10 +9,12 @@ PEERPORT="22"
 ######################################################################
 cd ${HOME}
 
-[ -f ${HOME}/.ssh/id_rsa ] \
-  || ssh-keygen -N '' -t rsa -b 4096 -f ${HOME}/.ssh/id_rsa
+[ -f ${HOME}/.ssh/id_ed25519 ] \
+  || ssh-keygen -N '' -t ed25519 -f $HOME/.ssh/id_ed25519
 [ -f ${HOME}/.ssh/authorized_keys2 ] \
-  || echo "command=\"git-shell -c \\\"\$SSH_ORIGINAL_COMMAND\\\"\" `cat ${HOME}/.ssh/id_rsa.pub`" >${HOME}/.ssh/authorized_keys2
+  || cat >${HOME}/.ssh/authorized_keys2 <<EOF
+command="gtfc-shell -c \"\$SSH_ORIGINAL_COMMAND\" `cat ${HOME}/.ssh/id_ed25519.pub`"
+EOF
 
 ######################################################################
 # 1. on HOSTA as ${MYUSER}, run: gtfc init HOSTA folder
@@ -181,29 +183,5 @@ elif [ "clone" = "$1" ]; then # run on clones
   fi
   git add .
   git commit -m "added `hostname` to authorized_keys2, known_hosts"
-######################################################################
-# 4. on HOSTA as ${MYUSER}, run: sh ${FOLDER}/.gtfc/gitpullall.sh -f
-# this may be run by gtfcr-add
-######################################################################
-
-######################################################################
-# 5. optional: on HOSTA as ${MYUSER}, run: gtfc push hostB
-######################################################################
-elif [ "push" = "$1" ]; then
-  [ -d ${FOLDER} ] || exit 1
-  cd ${FOLDER}
-  git remote add push${HOST} ssh://${MYUSER}@${HOST}:${PEERPORT}/${FOLDER}push
-  ssh ${MYUSER}@${HOST} 'git init --bare ${FOLDER}push'
-  while diff .git/config .gtfc/config ; do
-    sleep 1
-  done
-  cp .git/config .gtfc/config
-  cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts
-  git add .
-  git commit -m "added push${HOST} to config, ${HOST} to known_hosts"
-  git push push${HOST} master
-  ssh ${MYUSER}@${HOST} 'git clone ${FOLDER}push ${FOLDER}'
-  ssh ${MYUSER}@${HOST} 'sh ${FOLDER}/.gtfc/gitpullbare.sh'
-  # end of push
 
 fi
