@@ -23,15 +23,6 @@ for i in ${NODES} ; do
     if [ "x" != "x${HOST}" ]; then
         install -d -m 700 "/tmp/${USER}"
         LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
-        # Attempt to lock the lock file if it is set. via https://gist.github.com/liquidgecka/9788122
-        if [ -n "$LOCK_FILE" ] ; then
-            exec 200>> "$LOCK_FILE"
-            flock -w 0 -x 200
-            if [ $? -ne 0 ] ; then
-                echo "Unable to obtain a lock, is a job already running?"
-                exit 1
-            fi
-        fi
-        git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master tomerge &
+        lockf $LOCK_FILE git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master tomerge &
     fi
 done
