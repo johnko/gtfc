@@ -6,6 +6,8 @@
 [ -f ${HOME}/.ssh/id_ed25519 ] \
     || ssh-keygen -N '' -t ed25519 -f ${HOME}/.ssh/id_ed25519
 
-cat >${HOME}/.ssh/authorized_keys.mypubkey <<EOF
+if [ ! -e ${HOME}/.ssh/authorized_keys.mypubkey ]; then
+    cat >${HOME}/.ssh/authorized_keys.mypubkey <<EOF
 command="gtfc-shell -c \"\$SSH_ORIGINAL_COMMAND\" `cat ${HOME}/.ssh/id_ed25519.pub`
 EOF
+fi
