@@ -10,7 +10,7 @@ if [ ! -e ${HOME}/.ssh/gtfc_authorized_keys2 ]; then
     cat >${HOME}/.ssh/gtfc_authorized_keys2 <<EOF
 command="${HOME}/bin/gtfc-shell" `cat ${HOME}/.ssh/gtfc_id.pub`
 EOF
-    vi ${HOME}/.ssh/gtfc_authorized_keys2
+    # vi ${HOME}/.ssh/gtfc_authorized_keys2
 fi
 
 if [ ! -e ${HOME}/.ssh/gtfc_config ]; then
@@ -20,7 +20,7 @@ Host `hostname`
     Port 22
     User `whoami`
 EOF
-    vi ${HOME}/.ssh/gtfc_config
+    # vi ${HOME}/.ssh/gtfc_config
 fi
 
 sh ${HOME}/bin/gtfc-allowauthkey1
