@@ -5,10 +5,11 @@
 if [ "x" != "x$GITPATH" ]; then
     [ "x" != "x$DEBUG" ] && echo "${GITPATH}"
     cd ${GITPATH}
+    # This could probably be in a post-receive hook, but not sure if it the hook will be cloned to new repos
     git merge -m "merge after a push from ${SSH_CONNECTION}" tomerge >/dev/null 2>&1
     git branch -d tomerge >/dev/null 2>&1
     ###########################
-    # isntall different cluster files
+    # isntall cluster files to my .ssh
     for file in authorized_keys2 ; do
         [ -e ${GITPATH}/.gitcluster.ssh/${file} ] &&
             install -C -m 600 ${GITPATH}/.gitcluster.ssh/${file} ${HOME}/.ssh/${file}
