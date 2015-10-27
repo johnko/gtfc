@@ -3,9 +3,9 @@ git for cluster sync, naive synchronization over ssh.
 
 # How it works
 
-Use a kqueue watcher service to trigger gtfc-addandpush if files have changed.
+Use a kqueue watcher service to trigger gtfc-push if files have changed.
 
-Instead of lsyncd (which deletes the file without keeping history)
+Instead of lsyncd + rsync (which deletes the file without keeping history)
 
 # Properties
 
@@ -40,6 +40,14 @@ beta$  gtfc-join alpha ~/myrepo
 ```
 alpha$  echo `date` `hostname` > ~/myrepo/test
 alpha$  gtfc-push
+```
+
+## 4. If a node is rebooted
+
+You probably want to pull changes at boot or in a boot script.
+
+```
+beta$  gtfc-pull
 ```
 
 # Can some hosts be read-only?
