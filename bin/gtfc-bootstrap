@@ -14,7 +14,7 @@ git config user.name "`whoami`" >/dev/null 2>&1
 
 cd ${FOLDER}
 
-install -d 755 ${FOLDER}/.gitcluster.ssh
+install -d -m 755 ${FOLDER}/.gitcluster.ssh
 
 ###########################
 # add my pubkey to remote cluster and local repo
