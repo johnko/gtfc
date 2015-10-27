@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# gtfc-addandcommit
+# should be called from a kqueue watcher or manually
+
+FOLDER=$1
+if [ "x" = "x$FOLDER" ]; then
+  FOLDER="${HOME}/gitsync"
+fi
+
+[ -d ${FOLDER} ] || exit 1
+cd ${FOLDER}
+
+git commit -a -m "added a file - `whoami`@`hostname`"
+
+git push ssh://${MYUSER}@${HOST}:${PEERPORT}/tomerge master
+
+ssh ${MYUSER}@${HOST} 'git init --bare ${FOLDER}push'
+  while diff .git/config .gtfc/config ; do
+    sleep 1
+  done
+  cp .git/config .gtfc/config
+  cp ${HOME}/.ssh/known_hosts .gtfc/known_hosts
+  git add .
+  git commit -m "added push${HOST} to config, ${HOST} to known_hosts"
+  git push push${HOST} master
+  ssh ${MYUSER}@${HOST} 'git clone ${FOLDER}push ${FOLDER}'
+  ssh ${MYUSER}@${HOST} 'sh ${FOLDER}/.gtfc/gitpullbare.sh'
+  # end of push
+
+fi

@@ -5,27 +5,27 @@
 # in a sh file
 # . ~/bin/gtfc-parse user@hostname:port
 
-MYUSER1="`whoami`"
-PORT1="22"
+MYUSER="`whoami`"
+PORT="22"
 TOSPLIT=$1
 if grep '@' ${TOSPLIT} >/dev/null 2>&1 ; then
     if [ "x" != "x${TOSPLIT%@*}" ]; then
-        MYUSER1="${TOSPLIT%@*}"
+        MYUSER="${TOSPLIT%@*}"
     fi
 fi
-HOSTANDPORT1="${TOSPLIT#*@}"
-if [ "x" != "x${HOSTANDPORT1%:*}" ]; then
-    HOST1="${HOSTANDPORT1%:*}"
+HOSTANDPORT="${TOSPLIT#*@}"
+if [ "x" != "x${HOSTANDPORT%:*}" ]; then
+    HOST="${HOSTANDPORT%:*}"
 fi
-if grep ':' ${HOSTANDPORT1} >/dev/null 2>&1 ; then
-    if [ "x" != "${HOSTANDPORT1#*:}" ]; then
-        PORT1="${HOSTANDPORT1#*:}"
+if grep ':' ${HOSTANDPORT} >/dev/null 2>&1 ; then
+    if [ "x" != "${HOSTANDPORT#*:}" ]; then
+        PORT="${HOSTANDPORT#*:}"
     fi
 fi
-if [ "x" = "x$HOST1" ]; then
+if [ "x" = "x$HOST" ]; then
     exit 1
 fi
 
-export MYUSER1
-export HOST1
-export PORT1
+export MYUSER
+export HOST
+export PORT
