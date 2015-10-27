@@ -15,9 +15,9 @@ if [ "x" = "x$HOST" ]; then
     exit 1
 fi
 
-# get the config
-ssh -p ${PORT} ${MYUSER}@${HOST} "cat ${FOLDER}/.gitcluster.ssh/config" | cat > ${HOME}/.ssh/tmp_config
-ssh -p ${PORT} ${MYUSER}@${HOST} "cat ${FOLDER}/.gitcluster.ssh/known_hosts" | cat > ${HOME}/.ssh/tmp_known_hosts
+# get the existing cluster config using ssh -A
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p ${PORT} ${MYUSER}@${HOST} "cat ${FOLDER}/.gitcluster.ssh/known_hosts" | cat > ${HOME}/.ssh/tmp_known_hosts
+ssh -o UserKnownHostsFile=${HOME}/.ssh/tmp_known_hosts -p ${PORT} ${MYUSER}@${HOST} "cat ${FOLDER}/.gitcluster.ssh/config" | cat > ${HOME}/.ssh/tmp_config
 
 export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/tmp_config -o UserKnownHostsFile=${HOME}/.ssh/tmp_known_hosts -i ${HOME}/.ssh/gtfc_id"
 
