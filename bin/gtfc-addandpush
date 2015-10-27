@@ -13,6 +13,10 @@ cd ${FOLDER}
 git add --all .
 git commit -a -m "modified - `whoami`@`hostname`"
 
+if [ "x" = "x$NODES" ]; then
+    NODES=$( gtfc-nodes )
+fi
+
 for i in ${NODES} ; do
     export TOSPLIT=$i
     . ${HOME}/bin/gtfc-parse
