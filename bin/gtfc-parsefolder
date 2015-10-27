@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # gtfc parsefolder will set variables FOLDER and SAFEFOLDERNAME
+
 # Usage
 # in a sh file
 # . ~/bin/gtfc-parsefolder /usr/home/asdf

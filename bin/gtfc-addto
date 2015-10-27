@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Usage:
+# ssh -A newhost
+# gtfc-addto existingcluster /path/to/repo
+
+. ${HOME}/bin/gtfc-keygen
+. ${HOME}/bin/gtfc-parse $1
+. ${HOME}/bin/gtfc-parsefolder $2
+
+if [ "x" = "x$HOST" ]; then
+    echo "ERROR: missing host1" >&2
+    exit 1
+fi
+
+# This clone will only work with -A and add the HOST to known_hosts
+[ -d ${FOLDER} ] || git clone ssh://${MYUSER}@${HOST}:${PORT}/${REMOTEFOLDER}
+[ -d ${FOLDER} ] || exit 1
+
+# add my pubkey to existing cluster
+cat >${HOME}/.ssh/authorized_keys.mypubkey \
+| ssh -p ${PORT} ${MYUSER}@${HOST} "umask 077; test -d ~/.ssh || install -d -m 700 ~/.ssh ; cat >>~/.ssh/authorized_keys2"
+
+# get cluster's authorized_keys2
+ssh -p ${PORT} ${MYUSER}@${HOST} "cat ~/.ssh/authorized_keys2" | sort -u \
+| cat >>${HOME}/.ssh/authorized_keys2

@@ -4,10 +4,9 @@
 
 . ${HOME}/bin/gtfc-parse $1
 
-repo=$2
-
 if [ "x" = "x$HOST" ]; then
     echo "ERROR: missing host1" >&2
     exit 1
 fi
-ssh -t -p $PORT $MYUSER@$HOST "gtfc-init $1 $repo"
+
+ssh -t -p $PORT $MYUSER@$HOST "gtfc-bootstrap $1"

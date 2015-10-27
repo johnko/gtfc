@@ -1,9 +1,7 @@
 #!/bin/sh
 
-# gtfc-addandcommit
 # should be called from a kqueue watcher or manually
 # $0 /path/to/watch
-
 
 . ${HOME}/bin/gtfc-parsefolder $1
 

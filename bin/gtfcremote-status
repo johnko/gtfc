@@ -1,9 +1,8 @@
 #!/bin/sh
 
-# Compares the last git log of gitsync in HOSTS
+# Prints the last git log of gitcluster in HOSTS
 # Usage
 #  env MYUSER=urep HOSTS="one two three" $0
-
 
 if [ "x" = "x${MYUSER}" ]; then
     MYUSER="`whoami`"
@@ -14,5 +13,5 @@ for i in ${HOSTS} ; do
     for k in `seq ${#i} 10` ; do
         printf ' ';
     done
-    ssh ${MYUSER}@$i 'cd gitcluster && git log --oneline --decorate -1 | sed "s/master//g;s:/,::g"'
+    ssh ${MYUSER}@$i 'cd ~/gitcluster/working && git log --oneline --decorate -1 | sed "s/master//g;s:/,::g"'
 done

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# gtfc join
+# $0
+
+. ${HOME}/bin/gtfc-parse $1
+
+if [ "x" = "x$HOST" ]; then
+    echo "ERROR: missing host1" >&2
+    exit 1
+fi
+
+# log in to hostnew and join hostexist on repo 3
+ssh -t -p $PORT $MYUSER@$HOST "gtfc-join $2 $3"
