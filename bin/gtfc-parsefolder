@@ -8,6 +8,9 @@
 
 if [ "x" = "x$FOLDER" ]; then
     FOLDER="${HOME}/gitcluster/working"
+else
+    # strip the trailing slash
+    FOLDER=$( echo ${FOLDER} | sed 's;/$;;' )
 fi
 GITPACKDIR=${FOLDER%/*}/.git.${FOLDER##*/}
 REMOTEFOLDER=$( echo ${FOLDER} | sed 's;^/;;')
