@@ -5,6 +5,10 @@
         /root/git/gtfc/usr/local/lib/python2.7/site-packages/gtfcwatch.py \
                       /usr/local/lib/python2.7/site-packages/gtfcwatch.py
 
+pkg install -y py27-pip
+
+pip install watchdog
+
 env PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin" \
     FOLDER="$1" \
     /usr/local/bin/python2.7 -m gtfcwatch
