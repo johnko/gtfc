@@ -1,0 +1,10 @@
+#!/bin/sh
+
+[ -e /root/git/gtfc/usr/local/lib/python2.7/site-packages/gtfcwatch.py ] \
+    && install -C -m 644 \
+        /root/git/gtfc/usr/local/lib/python2.7/site-packages/gtfcwatch.py \
+                      /usr/local/lib/python2.7/site-packages/gtfcwatch.py
+
+env PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin" \
+    FOLDER="$1" \
+    /usr/local/bin/python2.7 -m gtfcwatch

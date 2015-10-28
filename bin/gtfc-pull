@@ -2,12 +2,12 @@
 
 # for maybe when a node is rebooted and needs to catch up
 
-export FOLDER=$1
-. ${HOME}/bin/gtfc-parsefolder
+export LOCALFOLDER=$1
+. ${HOME}/bin/gtfc-parselocalfolder
 
-[ -d ${FOLDER} ] || exit 1
+[ -d ${LOCALFOLDER} ] || exit 1
 
-cd ${FOLDER}
+cd ${LOCALFOLDER}
 
 . ${HOME}/bin/gtfc-ssh-command
 
@@ -17,7 +17,7 @@ sh ${HOME}/bin/gtfc-nodes \
     . ${HOME}/bin/gtfc-parse
     if [ "x" != "x${HOST}" ]; then
         install -d -m 700 "/tmp/${USER}"
-        LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
+        LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFELOCALFOLDERNAME}.lock"
         lockf $LOCK_FILE git pull ssh://${MYUSER}@${HOST}:${PORT}/${remotefolder} master
     fi
 done

@@ -4,22 +4,23 @@
 
 export FOLDER=$1
 . ${HOME}/bin/gtfc-parsefolder
+. ${HOME}/bin/gtfc-parselocalfolder
 . ${HOME}/bin/gtfc-keygen
 
 git config user.email "`whoami`@`hostname -s`.gtfc.local" >/dev/null 2>&1
 git config user.name "`whoami`" >/dev/null 2>&1
 
-[ -d ${FOLDER} ] || git init --separate-git-dir=${GITPACKDIR} ${FOLDER}
-[ -d ${FOLDER} ] || exit 1
+[ -d ${LOCALFOLDER} ] || git init --separate-git-dir=${GITPACKDIR} ${LOCALFOLDER}
+[ -d ${LOCALFOLDER} ] || exit 1
 
-cd ${FOLDER}
+cd ${LOCALFOLDER}
 
-install -d -m 755 ${FOLDER}/.gitcluster.ssh
+install -d -m 755 ${LOCALFOLDER}/.gitcluster.ssh
 
 ###########################
 # add my pubkey to remote cluster and local repo
 for file in authorized_keys2 ; do
-    install -C ${HOME}/.ssh/gtfc_${file}  ${FOLDER}/.gitcluster.ssh/${file}
+    install -C ${HOME}/.ssh/gtfc_${file}  ${LOCALFOLDER}/.gitcluster.ssh/${file}
     install -C ${HOME}/.ssh/gtfc_${file}  ${HOME}/.ssh/${file}
 done
 

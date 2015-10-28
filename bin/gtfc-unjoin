@@ -3,17 +3,17 @@
 # On the node you want to remove
 
 . ${HOME}/bin/gtfc-keygen
-export FOLDER=$1
-. ${HOME}/bin/gtfc-parsefolder
+export LOCALFOLDER=$1
+. ${HOME}/bin/gtfc-parselocalfolder
 
-[ -d ${FOLDER} ] || exit 1
+[ -d ${LOCALFOLDER} ] || exit 1
 
-cd ${FOLDER}
+cd ${LOCALFOLDER}
 
 # remove myself
-cat ${FOLDER}/.gitcluster.ssh/authorized_keys2 | grep -v "`whoami`@`hostname`$" > ${HOME}/.ssh/authorized_keys2
+cat ${LOCALFOLDER}/.gitcluster.ssh/authorized_keys2 | grep -v "`whoami`@`hostname`$" > ${HOME}/.ssh/authorized_keys2
 
 # copy and push
-install -C ${HOME}/.ssh/authorized_keys2 ${FOLDER}/.gitcluster.ssh/authorized_keys2
+install -C ${HOME}/.ssh/authorized_keys2 ${LOCALFOLDER}/.gitcluster.ssh/authorized_keys2
 
-sh ${HOME}/bin/gtfc-push ${FOLDER}
+sh ${HOME}/bin/gtfc-push ${LOCALFOLDER}

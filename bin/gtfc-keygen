@@ -23,8 +23,8 @@ EOF
     # vi ${HOME}/.ssh/gtfc_config
 fi
 
-if [ ! -e ${HOME}/.ssh/gtfc_node_${SAFEFOLDERNAME} ]; then
-    cat ${HOME}/.ssh/gtfc_node_${SAFEFOLDERNAME} <<EOF
+if [ ! -e ${HOME}/.ssh/gtfc_node_${SAFELOCALFOLDERNAME} ]; then
+    cat ${HOME}/.ssh/gtfc_node_${SAFELOCALFOLDERNAME} <<EOF
 `whoami`@`hostname`:22 ${FOLDER}
 EOF
     # vi ${HOME}/.ssh/gtfc_${SAFEFOLDERNAME}
