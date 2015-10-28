@@ -25,7 +25,7 @@ fi
 
 if [ ! -e ${HOME}/.ssh/gtfc_node_${SAFELOCALFOLDERNAME} ]; then
     cat > ${HOME}/.ssh/gtfc_node_${SAFELOCALFOLDERNAME} <<EOF
-`whoami`@`hostname`:22 ${FOLDER}
+`whoami`@`hostname`:22 ${LOCALFOLDER}
 EOF
     # vi ${HOME}/.ssh/gtfc_${SAFEFOLDERNAME}
 fi
