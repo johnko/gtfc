@@ -7,14 +7,14 @@
     || ssh-keygen -N '' -t ed25519 -f ${HOME}/.ssh/gtfc_id
 
 if [ ! -e ${HOME}/.ssh/gtfc_authorized_keys2 ]; then
-    cat >${HOME}/.ssh/gtfc_authorized_keys2 <<EOF
+    cat > ${HOME}/.ssh/gtfc_authorized_keys2 <<EOF
 command="${HOME}/bin/gtfc-shell" `cat ${HOME}/.ssh/gtfc_id.pub`
 EOF
     # vi ${HOME}/.ssh/gtfc_authorized_keys2
 fi
 
 if [ ! -e ${HOME}/.ssh/gtfc_config ]; then
-    cat >${HOME}/.ssh/gtfc_config <<EOF
+    cat > ${HOME}/.ssh/gtfc_config <<EOF
 Host `hostname`
     HostName `net-ip`
     Port 22
@@ -24,7 +24,7 @@ EOF
 fi
 
 if [ ! -e ${HOME}/.ssh/gtfc_node_${SAFELOCALFOLDERNAME} ]; then
-    cat ${HOME}/.ssh/gtfc_node_${SAFELOCALFOLDERNAME} <<EOF
+    cat > ${HOME}/.ssh/gtfc_node_${SAFELOCALFOLDERNAME} <<EOF
 `whoami`@`hostname`:22 ${FOLDER}
 EOF
     # vi ${HOME}/.ssh/gtfc_${SAFEFOLDERNAME}
