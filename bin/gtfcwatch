@@ -1,0 +1,29 @@
+#!/bin/sh
+# Copyright (c) 2015, John Ko
+# PROVIDE: gtfcwatch
+# REQUIRE: FILESYSTEMS LOGIN NETWORKING
+. /etc/rc.subr
+
+name="gtfcwatch"
+start_cmd="my_start"
+stop_cmd="my_stop"
+my_start()
+{
+    env PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin" \
+        /usr/local/bin/python2.7 -m gtfcwatch &
+}
+my_stop()
+{
+    # TODO need a more elegant solution than loop to kill
+    local LOOP=1
+    while [ $LOOP -eq 1 ]; do
+        if  /bin/pgrep -lf gtfcwatch > /dev/null 2> /dev/null ; then
+            /bin/pkill -lf gtfcwatch > /dev/null 2> /dev/null
+        else
+            local LOOP=0
+        fi
+        sleep 1
+    done
+}
+load_rc_config $name
+run_rc_command "$1"

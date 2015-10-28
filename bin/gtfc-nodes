@@ -3,4 +3,4 @@
 # Usage:
 # gtfc-nodes
 
-cat ${FOLDER}/.gitcluster.ssh/nodes
+cat ${FOLDER}/.gitcluster.ssh/nodes | grep -v "`whoami`@`hostname`:22 ${FOLDER}"

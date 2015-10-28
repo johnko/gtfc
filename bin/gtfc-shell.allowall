@@ -2,6 +2,8 @@
 
 # set the command of a pubkey to gtfc-shell to only allow git push and pull ops
 
+export DEBUG=1
+
 if [ "x" != "x$DEBUG" ]; then
     echo "${SSH_CONNECTION} SSH_ORIGINAL_COMMAND: ${SSH_ORIGINAL_COMMAND}" >>${HOME}/history-gtfc-remote
     if [ "x" != "x$*" ]; then
