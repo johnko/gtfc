@@ -13,16 +13,15 @@ cd ${FOLDER}
 git add --all .
 git commit -a -m "modified - `whoami`@`hostname`"
 
-if [ "x" = "x$NODES" ]; then
-    NODES=$( gtfc-nodes )
-fi
 . ${HOME}/bin/gtfc-ssh-command
-for i in ${NODES} ; do
-    export TOSPLIT=$i
+
+sh ${HOME}/bin/gtfc-nodes \
+| while read userhostport remotefolder ; do
+    export TOSPLIT=$userhostport
     . ${HOME}/bin/gtfc-parse
     if [ "x" != "x${HOST}" ]; then
         install -d -m 700 "/tmp/${USER}"
         LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
-        lockf $LOCK_FILE git push ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master:refs/heads/tomerge
+        lockf $LOCK_FILE git push ssh://${MYUSER}@${HOST}:${PORT}/${remotefolder} master:refs/heads/tomerge
     fi
 done

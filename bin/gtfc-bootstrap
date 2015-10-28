@@ -2,9 +2,9 @@
 
 # gtfc-bootstrap folder
 
-. ${HOME}/bin/gtfc-keygen
 export FOLDER=$1
 . ${HOME}/bin/gtfc-parsefolder
+. ${HOME}/bin/gtfc-keygen
 
 git config user.email "`whoami`@`hostname -s`.gtfc.local" >/dev/null 2>&1
 git config user.name "`whoami`" >/dev/null 2>&1

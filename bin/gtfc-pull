@@ -9,16 +9,15 @@ export FOLDER=$1
 
 cd ${FOLDER}
 
-if [ "x" = "x$NODES" ]; then
-    NODES=$( gtfc-nodes )
-fi
 . ${HOME}/bin/gtfc-ssh-command
-for i in ${NODES} ; do
-    export TOSPLIT=$i
+
+sh ${HOME}/bin/gtfc-nodes \
+| while read userhostport remotefolder ; do
+    export TOSPLIT=$userhostport
     . ${HOME}/bin/gtfc-parse
     if [ "x" != "x${HOST}" ]; then
         install -d -m 700 "/tmp/${USER}"
         LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFEFOLDERNAME}.lock"
-        lockf $LOCK_FILE git pull ssh://${MYUSER}@${HOST}:${PEERPORT}/${REMOTEFOLDER} master
+        lockf $LOCK_FILE git pull ssh://${MYUSER}@${HOST}:${PORT}/${remotefolder} master
     fi
 done

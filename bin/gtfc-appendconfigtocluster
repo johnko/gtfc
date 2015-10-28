@@ -6,3 +6,5 @@ ssh -F ${HOME}/.ssh/gtfc_config -o UserKnownHostsFile=${HOME}/.ssh/gtfc_known_ho
 for file in config known_hosts ; do
     cat ${HOME}/.ssh/gtfc_${file} >> ${FOLDER}/.gitcluster.ssh/${file}
 done
+
+cat ${HOME}/.ssh/gtfc_node_${SAFEFOLDERNAME} >> ${FOLDER}/.gitcluster.ssh/nodes

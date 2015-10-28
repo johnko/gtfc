@@ -4,11 +4,11 @@
 # ssh -A newhost
 # gtfc-addto existingcluster /path/to/repo
 
-. ${HOME}/bin/gtfc-keygen
 export TOSPLIT=$1
 . ${HOME}/bin/gtfc-parse
 export FOLDER=$2
 . ${HOME}/bin/gtfc-parsefolder
+. ${HOME}/bin/gtfc-keygen
 
 if [ "x" = "x$HOST" ]; then
     echo "ERROR: missing host" >&2

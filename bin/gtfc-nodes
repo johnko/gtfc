@@ -3,4 +3,4 @@
 # Usage:
 # gtfc-nodes
 
-cat ${FOLDER}/.gitcluster.ssh/config | grep '^Host' | grep -v "`hostname`$" | awk '{print $NF}'
+cat ${FOLDER}/.gitcluster.ssh/nodes
