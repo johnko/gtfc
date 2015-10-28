@@ -9,6 +9,10 @@ start_cmd="my_start"
 stop_cmd="my_stop"
 my_start()
 {
+    [ -e /root/git/gtfc/usr/local/lib/python2.7/site-packages/gtfcwatch.py ] \
+        && install -C -m 644 \
+            /root/git/gtfc/usr/local/lib/python2.7/site-packages/gtfcwatch.py \
+                          /usr/local/lib/python2.7/site-packages/gtfcwatch.py
     env PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin" \
         /usr/local/bin/python2.7 -m gtfcwatch &
 }
