@@ -9,4 +9,4 @@ pkg install -y py27-pip
 
 pip install watchdog
 
-/usr/local/bin/python2.7 -m gtfcwatch $1
+/usr/local/bin/python2.7 -m gtfcwatch $1 &
