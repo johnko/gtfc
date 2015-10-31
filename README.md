@@ -3,7 +3,7 @@ git for cluster sync over ssh: on kqueue, add, commit, push, merge.
 
 ## How it works
 
-Use a kqueue watcher service to trigger gtfc-push if files have changed.
+Use a kqueue watcher service to trigger `gtfc-push` if files have changed.
 There's an example in `gtfc-watch` which launches `gtfcwatch.py`
 
 ## Properties
