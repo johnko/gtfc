@@ -12,7 +12,7 @@ Property                                   | Description
 -------------------------------------------|------------------
 Centralized aspect                         | Only the first node with unique/latest data will be central until it completes a push.
 Decentralized storage                      | Yes. When all nodes are up to date, there is no central store because git repositories are mirrors. Akin to RAID1 mirror, but not to RAID5 span.
-Distributed storage                        | No, files are not split/striped.
+Distributed storage                        | No, files are not split/striped across nodes.
 Decentralized/distributed transfers        | Yes. Nodes can push to any other nodes.
 Chunked data transfers from multiple hosts | No.
 Security?                                  | Pretty good, but only as good as your SSH config.
