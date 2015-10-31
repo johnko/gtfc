@@ -1,5 +1,5 @@
 # gtfc
-git for cluster sync, naive synchronization over ssh.
+git for cluster sync over ssh: on kqueue, add, commit, push, merge.
 
 ## How it works
 
