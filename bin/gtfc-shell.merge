@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# set the command of a pubkey to gtfc-shell to only allow git push and pull ops
+# don't set this as command directly, use gtfc-shell or gtfc-shell.denywrite instead
 
 if [ "x" != "x$GITPATH" ]; then
     [ "x" != "x$DEBUG" ] && echo "${GITPATH}"
