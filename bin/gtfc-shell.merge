@@ -15,5 +15,7 @@ if [ "x" != "x$GITPATH" ]; then
             install -C -m 600 ${GITPATH}/.gitcluster.ssh/${file} ${HOME}/.ssh/${file}
     done
     ###########################
+    ### run gtfc-overlay.sh if it exists in the gitpath
+    [ -f ${GITPATH}/gtfc-overlay.sh ] && sh ${GITPATH}/gtfc-overlay.sh ${GITPATH}
 
 fi
