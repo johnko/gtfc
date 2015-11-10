@@ -1,0 +1,15 @@
+#!/bin/sh
+
+TMPDIR=/tmp/gtfc-overlay
+
+GITCLUSTER=$1
+
+if [ "x" = "x$GITCLUSTER" ]; then
+    GITCLUSTER="${HOME}/gitcluster/working"
+fi
+
+[ -e $TMPDIR ] && rm -fr $TMPDIR
+
+git clone https://github.com/johnko/gtfc-overlay $TMPDIR
+
+rsync -viaP --inplace --exclude .git --exclude README.md $TMPDIR/ $GITCLUSTER/
