@@ -10,6 +10,6 @@ fi
 
 [ -e $TMPDIR ] && rm -fr $TMPDIR
 
-git clone https://github.com/johnko/gtfc-overlay $TMPDIR
+git clone --depth 1 https://github.com/johnko/gtfc-overlay $TMPDIR
 
 rsync -viaP --inplace --exclude .git --exclude README.md $TMPDIR/ $GITCLUSTER/
