@@ -5,12 +5,12 @@
 # gtfc-addto existingcluster /path/to/repo
 
 export TOSPLIT=$1
-. ${HOME}/bin/gtfc-parse
+. /usr/local/bin/gtfc-parse
 export FOLDER=$2
-. ${HOME}/bin/gtfc-parsefolder
+. /usr/local/bin/gtfc-parsefolder
 export LOCALFOLDER=$3
-. ${HOME}/bin/gtfc-parselocalfolder
-. ${HOME}/bin/gtfc-keygen
+. /usr/local/bin/gtfc-parselocalfolder
+. /usr/local/bin/gtfc-keygen
 
 if [ "x" = "x$HOST" ]; then
     echo "ERROR: missing host" >&2
@@ -35,7 +35,7 @@ fi
 ###########################
 
 if [ "`net-ip`" != "${HOST}" ]; then
-    . ${HOME}/bin/gtfc-ssh-command
+    . /usr/local/bin/gtfc-ssh-command
     # add my pubkey to remote cluster and local repo
     for file in authorized_keys2 ; do
         cat ${HOME}/.ssh/gtfc_${file} \
@@ -47,8 +47,8 @@ if [ "`net-ip`" != "${HOST}" ]; then
     done
 fi
 
-sh ${HOME}/bin/gtfc-appendconfigtocluster
+gtfc-appendconfigtocluster
 ###########################
 
 #  and push
-sh ${HOME}/bin/gtfc-push ${LOCALFOLDER}
+gtfc-push ${LOCALFOLDER}

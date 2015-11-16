@@ -6,7 +6,7 @@
 if ! grep "gtfc-shell.allowall" ${HOME}/.ssh/authorized_keys >/dev/null 2>&1 ; then
     install -C ${HOME}/.ssh/authorized_keys  ${HOME}/.ssh/gtfc_authorized_keys1
     cat ${HOME}/.ssh/gtfc_authorized_keys1 \
-        | awk "{print \"command=\\\"${HOME}/bin/gtfc-shell.allowall\\\" \"\$0}" \
+        | awk "{print \"command=\\\"gtfc-shell.allowall\\\" \"\$0}" \
         > ${HOME}/.ssh/authorized_keys
 
 fi

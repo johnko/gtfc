@@ -2,9 +2,9 @@
 
 # On the node you want to remove
 
-. ${HOME}/bin/gtfc-keygen
+. /usr/local/bin/gtfc-keygen
 export LOCALFOLDER=$1
-. ${HOME}/bin/gtfc-parselocalfolder
+. /usr/local/bin/gtfc-parselocalfolder
 
 [ -d ${LOCALFOLDER} ] || exit 1
 
@@ -16,4 +16,4 @@ cat ${LOCALFOLDER}/.gitcluster.ssh/authorized_keys2 | grep -v "`whoami`@`hostnam
 # copy and push
 install -C ${HOME}/.ssh/authorized_keys2 ${LOCALFOLDER}/.gitcluster.ssh/authorized_keys2
 
-sh ${HOME}/bin/gtfc-push ${LOCALFOLDER}
+gtfc-push ${LOCALFOLDER}

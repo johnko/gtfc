@@ -4,7 +4,7 @@
 # $0 /path/to/watch
 
 export LOCALFOLDER=$1
-. ${HOME}/bin/gtfc-parselocalfolder
+. /usr/local/bin/gtfc-parselocalfolder
 
 [ -d ${LOCALFOLDER} ] || exit 1
 
@@ -13,12 +13,12 @@ cd ${LOCALFOLDER}
 git add --all .
 git commit -a -m "modified - `whoami`@`hostname`"
 
-. ${HOME}/bin/gtfc-ssh-command
+. /usr/local/bin/gtfc-ssh-command
 
-sh ${HOME}/bin/gtfc-nodes \
+gtfc-nodes \
 | while read userhostport remotefolder ; do
     export TOSPLIT=$userhostport
-    . ${HOME}/bin/gtfc-parse
+    . /usr/local/bin/gtfc-parse
     if [ "x" != "x${HOST}" ]; then
         install -d -m 700 "/tmp/${USER}"
         LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFELOCALFOLDERNAME}.lock"

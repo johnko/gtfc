@@ -3,18 +3,18 @@
 # for maybe when a node is rebooted and needs to catch up
 
 export LOCALFOLDER=$1
-. ${HOME}/bin/gtfc-parselocalfolder
+. /usr/local/bin/gtfc-parselocalfolder
 
 [ -d ${LOCALFOLDER} ] || exit 1
 
 cd ${LOCALFOLDER}
 
-. ${HOME}/bin/gtfc-ssh-command
+. /usr/local/bin/gtfc-ssh-command
 
-sh ${HOME}/bin/gtfc-nodes \
+gtfc-nodes \
 | while read userhostport remotefolder ; do
     export TOSPLIT=$userhostport
-    . ${HOME}/bin/gtfc-parse
+    . /usr/local/bin/gtfc-parse
     if [ "x" != "x${HOST}" ]; then
         install -d -m 700 "/tmp/${USER}"
         LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFELOCALFOLDERNAME}.lock"

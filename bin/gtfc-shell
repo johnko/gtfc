@@ -15,6 +15,6 @@ if echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-upload-pack ' >/dev/null 2>&1 ; t
 elif echo "${SSH_ORIGINAL_COMMAND}" | grep '^git-receive-pack ' >/dev/null 2>&1 ; then
     git-shell -c "${SSH_ORIGINAL_COMMAND}"
     export GITPATH=`echo "${SSH_ORIGINAL_COMMAND}" | sed 's;git-receive-pack ;;' | sed "s;^';;" | sed "s;'$;;"`
-    sh ${HOME}/bin/gtfc-shell.merge
+    gtfc-shell.merge
 
 fi

@@ -4,7 +4,7 @@
 # $0
 
 TOSPLIT=$1
-. ${HOME}/bin/gtfc-parse
+. /usr/local/bin/gtfc-parse
 
 if [ "x" = "x$HOST" ]; then
     echo "ERROR: missing host1" >&2

@@ -3,9 +3,9 @@
 # gtfc-bootstrap folder
 
 export FOLDER=$1
-. ${HOME}/bin/gtfc-parsefolder
-. ${HOME}/bin/gtfc-parselocalfolder
-. ${HOME}/bin/gtfc-keygen
+. /usr/local/bin/gtfc-parsefolder
+. /usr/local/bin/gtfc-parselocalfolder
+. /usr/local/bin/gtfc-keygen
 
 git config user.email "`whoami`@`hostname -s`.gtfc.local" >/dev/null 2>&1
 git config user.name "`whoami`" >/dev/null 2>&1
@@ -24,7 +24,7 @@ for file in authorized_keys2 ; do
     install -C ${HOME}/.ssh/gtfc_${file}  ${HOME}/.ssh/${file}
 done
 
-sh ${HOME}/bin/gtfc-appendconfigtocluster
+gtfc-appendconfigtocluster
 ###########################
 
 git add --all .
