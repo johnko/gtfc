@@ -8,7 +8,7 @@
 
 MYUSER="`whoami`"
 PORT="22"
-if grep '@' ${TOSPLIT} >/dev/null 2>&1 ; then
+if echo ${TOSPLIT} | grep '@' >/dev/null 2>&1 ; then
     if [ "x" != "x${TOSPLIT%@*}" ]; then
         MYUSER="${TOSPLIT%@*}"
     fi
@@ -17,7 +17,7 @@ HOSTANDPORT="${TOSPLIT#*@}"
 if [ "x" != "x${HOSTANDPORT%:*}" ]; then
     HOST="${HOSTANDPORT%:*}"
 fi
-if grep ':' ${HOSTANDPORT} >/dev/null 2>&1 ; then
+if echo ${HOSTANDPORT} | grep ':' >/dev/null 2>&1 ; then
     if [ "x" != "${HOSTANDPORT#*:}" ]; then
         PORT="${HOSTANDPORT#*:}"
     fi
