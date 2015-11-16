@@ -22,6 +22,7 @@ gtfc-nodes \
     if [ "x" != "x${HOST}" ]; then
         install -d -m 700 "/tmp/${USER}"
         LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFELOCALFOLDERNAME}.lock"
-        lockf $LOCK_FILE git push ssh://${MYUSER}@${HOST}:${PORT}/${remotefolder} master:refs/heads/tomerge
+        lockf $LOCK_FILE git push ssh://${MYUSER}@${HOST}:${PORT}/${remotefolder} master:refs/heads/tomerge &
+        sleep 1
     fi
 done
