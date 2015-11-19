@@ -3,6 +3,8 @@
 # Usage:
 # gtfc-keygen
 
+MYNIC=`net-nic`
+
 [ -f ${HOME}/.ssh/gtfc_id ] \
     || ssh-keygen -N '' -t ed25519 -f ${HOME}/.ssh/gtfc_id
 
@@ -16,7 +18,7 @@ fi
 if [ ! -e ${HOME}/.ssh/gtfc_config ]; then
     cat > ${HOME}/.ssh/gtfc_config <<EOF
 Host `hostname`
-    HostName `net-ip`
+    HostName `net-ip $MYNIC`
     Port 22
     User `whoami`
 EOF

@@ -1,6 +1,8 @@
 #!/bin/sh
 
-ssh -F ${HOME}/.ssh/gtfc_config -o UserKnownHostsFile=${HOME}/.ssh/gtfc_known_hosts -o StrictHostKeyChecking=no -i ${HOME}/.ssh/gtfc_id `net-ip` date
+MYNIC=`net-nic`
+
+ssh -F ${HOME}/.ssh/gtfc_config -o UserKnownHostsFile=${HOME}/.ssh/gtfc_known_hosts -o StrictHostKeyChecking=no -i ${HOME}/.ssh/gtfc_id `net-ip $MYNIC` date
 
 # append my version to local repo
 for file in config known_hosts ; do
