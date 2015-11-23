@@ -1,4 +1,4 @@
 #!/bin/sh
 
 
-export GIT_SSH_COMMAND="ssh -tt -F ${LOCALFOLDER}/.gitcluster.ssh/config -o UserKnownHostsFile=${LOCALFOLDER}/.gitcluster.ssh/known_hosts -i ${HOME}/.ssh/gtfc_id"
+export GIT_SSH_COMMAND="ssh -F ${LOCALFOLDER}/.gitcluster.ssh/config -o UserKnownHostsFile=${LOCALFOLDER}/.gitcluster.ssh/known_hosts -i ${HOME}/.ssh/gtfc_id"
