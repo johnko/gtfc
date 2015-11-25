@@ -18,6 +18,6 @@ gtfc-nodes \
     if [ "x" != "x${HOST}" ]; then
         install -d -m 700 "/tmp/${USER}"
         LOCK_FILE="/tmp/${MYUSER}/${HOST}-${SAFELOCALFOLDERNAME}.lock"
-        lockf $LOCK_FILE git pull ssh://${MYUSER}@${HOST}:${PORT}/${remotefolder} master
+        lockf $LOCK_FILE git pull ssh://${MYUSER}@${HOST}:${PORT}/${remotefolder} master &
     fi
 done
