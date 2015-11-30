@@ -21,3 +21,7 @@ gtfc-nodes \
         lockf $LOCK_FILE git pull ssh://${MYUSER}@${HOST}:${PORT}/${remotefolder} master &
     fi
 done
+
+if [ -e ${LOCALFOLDER}/gtfc-overlay.sh ]; then
+    echo "Wait until the git pull complets, then run: sh ${LOCALFOLDER}/gtfc-overlay.sh"
+fi

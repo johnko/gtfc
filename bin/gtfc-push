@@ -26,3 +26,7 @@ gtfc-nodes \
         sleep 1
     fi
 done
+
+if [ -e ${LOCALFOLDER}/gtfc-overlay.sh ]; then
+    sh ${LOCALFOLDER}/gtfc-overlay.sh
+fi
